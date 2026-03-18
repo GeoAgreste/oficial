@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GeoAgreste Engenharia Cartográfica - Soluções em Georreferenciamento, Topografia, Drones (UAS) e Regularização Fundiária no Nordeste.">
+    <meta name="keywords" content="Engenharia Cartográfica, Agrimensura, Drone, UAS, ABNT NBR 17209, REURB, Georreferenciamento, Topografia, GeoAgreste">
+    <meta name="author" content="GeoAgreste">
+    <title>GeoAgreste | Engenharia de Precisão & Geotecnologias</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIÁVEIS E RESET --- */
+        :root {
+            --cor-primaria: #0e2e42; /* Azul Escuro GeoAgreste */
+            --cor-secundaria: #1f5c35; /* Verde Agreste */
+            --cor-destaque: #cfa84a; /* Dourado Premium */
+            --cor-texto: #333333;
+            --cor-cinza-claro: #f4f6f8;
+            --cor-fundo-claro: #f8f9fa;
+            --cor-fundo-escuro: #111111;
+            --borda-suave: 1px solid rgba(0,0,0,0.05);
+            --sombra-card: 0 15px 35px rgba(0,0,0,0.05);
+            --sombra-hover: 0 20px 40px rgba(0,0,0,0.1);
+            --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--cor-texto);
+            line-height: 1.6;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--cor-primaria);
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            transition: var(--transicao);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- BOTÕES --- */
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: var(--cor-destaque);
+            color: var(--cor-primaria);
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            border: 2px solid var(--cor-destaque);
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(207, 168, 74, 0.3);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--cor-destaque);
+            box-shadow: none;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: #fff;
+            color: var(--cor-primaria);
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .section-title span {
+            color: var(--cor-destaque);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--cor-destaque);
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            background: var(--cor-primaria);
+            color: #fff;
+            padding: 10px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-info i {
+            color: var(--cor-destaque);
+            margin-right: 8px;
+        }
+
+        .top-info span {
+            margin-right: 20px;
+        }
+
+        .top-social a {
+            color: #fff;
+            margin-left: 15px;
+        }
+
+        .top-social a:hover {
+            color: var(--cor-destaque);
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 3px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--cor-primaria);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        
+        .logo img {
+            height: 90px;
+            width: auto;
+            display: block;
+        }
+
+        .logo img {
+            height: 80px;
+            width: auto;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cor-primaria);
+            text-transform: uppercase;
+            position: relative;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--cor-destaque);
+            transition: 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 22px;
+            background: var(--cor-secundaria);
+            color: #fff !important;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+            /* Efeito de movimento removido para evitar tremedeira */
+        }
+
+        .nav-cta:hover {
+            background: var(--cor-primaria);
+        }
+
+        /* BOTÃO DESTAQUE CURSO RPA - SEM EFEITO DE PISCAR E SEM MOVIMENTO */
+        .nav-curso {
+            padding: 10px 20px;
+            background: var(--cor-destaque);
+            color: var(--cor-primaria) !important;
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: background 0.3s;
+        }
+
+        .nav-curso:hover {
+            background: #b5903b;
+            color: #fff !important;
+        }
+        
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--cor-primaria);
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 95vh;
+            background: linear-gradient(rgba(14, 46, 66, 0.85), rgba(31, 92, 53, 0.8)), url('img/imagem.png') no-repeat center center/cover;
+            background-color: var(--cor-primaria); /* Fallback */
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid var(--cor-destaque);
+            color: var(--cor-destaque);
+            backdrop-filter: blur(5px);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box strong {
+            display: block;
+            font-size: 2.2rem;
+            color: var(--cor-destaque);
+            font-weight: 800;
+        }
+
+        .stat-box span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* --- SEÇÃO SOBRE --- */
+        .about {
+            background-color: #fff;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--cor-secundaria);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            color: #555;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+
+        /* FUNDADORES */
+        .founders {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .founder-card {
+            background: var(--cor-fundo-claro);
+            padding: 30px 20px;
+            border-radius: 12px;
+            border-top: 4px solid var(--cor-destaque);
+            flex: 1;
+            text-align: center;
+            box-shadow: var(--sombra-card);
+            transition: var(--transicao);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .founder-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sombra-hover);
+        }
+
+        .founder-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--cor-destaque);
+            margin-bottom: 15px;
+            background-color: #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .founder-card h4 {
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+            color: var(--cor-primaria);
+        }
+
+        .founder-card small {
+            color: var(--cor-secundaria);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            display: block;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .founder-card p {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .about-img {
+            position: relative;
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--sombra-card);
+        }
+        
+        .experience-badge {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            background: var(--cor-destaque);
+            color: var(--cor-primaria);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(207, 168, 74, 0.4);
+        }
+        
+        .experience-badge span {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        /* --- SERVIÇOS --- */
+        .services {
+            background-color: var(--cor-fundo-claro);
+            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            transition: var(--transicao);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid transparent;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--sombra-card);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--sombra-hover);
+            border-bottom: 4px solid var(--cor-destaque);
+        }
+
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            background: rgba(31, 92, 53, 0.05);
+            color: var(--cor-secundaria);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            transition: var(--transicao);
+        }
+
+        .service-card:hover .icon-box {
+            background: var(--cor-secundaria);
+            color: #fff;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card .service-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .service-list li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #555;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .service-list li i {
+            color: var(--cor-destaque);
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        /* --- PORTFÓLIO ADMIN & GRID --- */
+        .portfolio-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 2px solid var(--cor-primaria);
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            color: var(--cor-primaria);
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--cor-primaria);
+            color: #fff;
+            border-color: var(--cor-primaria);
+            box-shadow: 0 4px 10px rgba(14, 46, 66, 0.2);
+        }
+
+        .admin-controls {
+            display: none;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .portfolio-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--sombra-card);
+            background: #000;
+            height: 300px;
+        }
+
+        .portfolio-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            opacity: 0.9;
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(14, 46, 66, 0.95));
+            padding: 30px 20px 20px;
+            color: #fff;
+            transform: translateY(20px);
+            transition: 0.4s ease;
+        }
+
+        .portfolio-item:hover .portfolio-media {
+            transform: scale(1.08);
+            opacity: 0.7;
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            transform: translateY(0);
+        }
+
+        .portfolio-cat {
+            font-size: 0.8rem;
+            color: var(--cor-destaque);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .portfolio-overlay h4 {
+            color: #fff;
+            margin: 0 0 5px;
+            font-size: 1.2rem;
+        }
+
+        .portfolio-overlay p {
+            font-size: 0.9rem;
+            color: #ddd;
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .btn-delete-proj {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .btn-delete-proj:hover { background: #c0392b; }
+
+        /* --- CONFORMIDADE TÉCNICA E JURÍDICA --- */
+        .compliance-section {
+            padding: 100px 0;
+            background: var(--cor-primaria);
+            color: #fff;
+            position: relative;
+        }
+
+        .compliance-intro {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 50px;
+        }
+
+        .compliance-intro h2 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .compliance-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 30px;
+            border-radius: 12px;
+            transition: var(--transicao);
+        }
+
+        .compliance-box:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: var(--cor-destaque);
+            transform: translateY(-5px);
+        }
+
+        .compliance-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .compliance-title i {
+            font-size: 1.8rem;
+            color: var(--cor-destaque);
+        }
+
+        .compliance-title h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .agency-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .agency-tag {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 3px solid var(--cor-destaque);
+            transition: background 0.3s;
+        }
+        
+        .agency-tag:hover { background: rgba(255,255,255,0.1); }
+
+        .agency-tag i { color: var(--cor-destaque); font-size: 0.9rem; }
+
+        .norm-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--cor-destaque);
+            font-weight: 800;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* --- TESTEMUNHOS --- */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .testimonial-card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-card);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 4rem;
+            color: var(--cor-fundo-claro);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .stars { color: var(--cor-destaque); margin-bottom: 15px; font-size: 1.1rem; }
+
+        /* --- FAQ --- */
+        .faq-section { background-color: #fff; }
+        
+        .faq-category-title {
+            font-family: 'Montserrat';
+            font-size: 1.2rem;
+            color: var(--cor-secundaria);
+            margin: 40px 0 20px;
+            border-left: 4px solid var(--cor-destaque);
+            padding-left: 15px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .accordion-item {
+            background: #fff;
+            border: 1px solid var(--borda-suave);
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transicao);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        
+        .accordion-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--cor-primaria);
+            transition: background 0.3s;
+        }
+        
+        .accordion-header:hover { background: var(--cor-fundo-claro); }
+        .accordion-header.active { color: var(--cor-secundaria); }
+        
+        .accordion-content {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        .accordion-content p { padding-bottom: 25px; }
+
+        /* --- FORMULÁRIO --- */
+        .contact-advanced {
+            background: linear-gradient(135deg, var(--cor-secundaria), var(--cor-primaria));
+            border-radius: 20px;
+            padding: 60px;
+            color: #fff;
+            box-shadow: 0 20px 40px rgba(14, 46, 66, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-advanced::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(207,168,74,0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .form-grid-adv {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group-adv { display: flex; flex-direction: column; }
+
+        .form-group-adv label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 0.5px;
+        }
+
+        .form-group-adv input, .form-group-adv select, .form-group-adv textarea {
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            transition: var(--transicao);
+        }
+        
+        .form-group-adv input:focus, .form-group-adv select:focus, .form-group-adv textarea:focus {
+            outline: none;
+            background: rgba(255,255,255,0.1);
+            border-color: var(--cor-destaque);
+        }
+
+        .form-group-adv select option { color: var(--cor-texto); }
+
+        .full-width-adv { grid-column: span 2; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--cor-fundo-escuro);
+            color: #a0a0a0;
+            padding: 80px 0 30px;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            color: #fff;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col ul li { margin-bottom: 15px; }
+
+        .footer-col ul li a {
+            color: #a0a0a0;
+            transition: var(--transicao);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--cor-destaque);
+            padding-left: 8px;
+        }
+
+        .contact-li { display: flex; align-items: flex-start; gap: 10px; }
+        .contact-li i { color: var(--cor-destaque); margin-top: 5px; }
+
+        .copyright {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- WHATSAPP --- */
+        .whatsapp-float {
+            position: fixed;
+            width: 65px;
+            height: 65px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 35px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transicao);
+        }
+        
+        .whatsapp-float:hover {
+            background-color: #20ba5a;
+            transform: scale(1.1) translateY(-5px);
+        }
+
+        /* MODAIS ADMIN */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 20000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-box {
+            background: #fff; padding: 40px; border-radius: 15px; width: 90%; max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+        .modal-box h3 { color: var(--cor-primaria); margin-bottom: 25px; text-transform: uppercase; }
+        .admin-form-group { margin-bottom: 20px; }
+        .admin-form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; }
+        .admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;
+        }
+        .admin-btns { display: flex; gap: 10px; margin-top: 30px; }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-grid, .footer-grid, .form-grid-adv { grid-template-columns: 1fr; }
+            .full-width-adv { grid-column: span 1; }
+            .hero-stats { flex-direction: column; gap: 20px; }
+            .founders { flex-direction: column; }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                padding: 30px 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                z-index: 1001;
+                gap: 20px;
+            }
+            .nav-menu.active { display: flex; }
+            .menu-toggle { display: block; }
+            .nav-cta, .nav-curso { width: 100%; text-align: center; justify-content: center; }
+            .copyright { flex-direction: column; gap: 15px; }
+        }
+        @media (max-width: 1100px) and (min-width: 993px) {
+            .nav-menu { gap: 15px; }
+            .nav-link { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-info">
+                <span><i class="fas fa-map-marker-alt"></i> Atendimento especializado em todo o território nacional</span>
+            </div>
+            <div class="top-social">
+    <a href="https://www.instagram.com/geo_agreste/" target="_blank">
+        <i class="fab fa-instagram"></i>
+    </a>
+    <a href="#"><i class="fab fa-linkedin"></i></a>
+<a href="https://wa.me/5571985036763?text=Olá,%20vim%20pelo%20site%20e%20quero%20mais%20informações." target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+</div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <img src="Sem_Fundo.png" alt="Logo GeoAgreste"> GeoAgreste 
+            </a>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Início</a></li>
+                <li><a href="#sobre" class="nav-link">A Empresa</a></li>
+                <li><a href="#servicos" class="nav-link">Serviços</a></li>
+                <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
+                <li>
+                    <a href="#curso-drone" class="nav-curso">
+                        <i class="fas fa-plane-up"></i> Curso de Piloto RPA
+                    </a>
+                </li>
+                <li><a href="#contato" class="nav-cta">Orçamento Técnico</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <span class="hero-tag">Geotecnologia & Engenharia de Precisão</span>
+            <h1>Engenharia de Precisão: Segurança e Valorização do seu Patrimônio</h1>
+            <p>Soluções completas em topografia e regularização de imóveis, garantindo a segurança jurídica do seu património com agilidade e tecnologia de ponta.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-box"><strong>+50k</strong><span>Hectares Mapeados</span></div>
+                <div class="stat-box"><strong>100%</strong><span>Aprovação SIGEF</span></div>
+                <div class="stat-box"><strong>+12</strong><span>Cidades Atendidas</span></div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="#servicos" class="btn">Conheça Nossas Soluções</a>
+                <a href="#contato" class="btn btn-outline">Falar com Engenheiro</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding about" id="sobre">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Engenheiro Agrimensor em Campo">
+                    <div class="experience-badge">
+                        <span>5+</span>
+                        Anos de Expertise<br>Combinada
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>Precisão que Gera Valor</h3>
+                    <h4>GeoAgreste Engenharia de Agrimensura e Cartográfica</h4>
+                    <p>
+                    A GeoAgreste nasce da união de especialistas em Engenharia de Agrimensura e Cartográfica, formados pela Universidade Federal da Bahia (UFBA), com atuação voltada à transformação de dados espaciais em informações técnicas confiáveis e soluções estratégicas para o agronegócio, a construção civil e a gestão pública desde o ano 2025.
+                    </p>
+                    <p>
+                    Nossa experiência abrange mais de <strong>100 ha mapeados por meio de aerolevantamentos com drones</strong> e mais de <strong>70 ha levantados com topografia convencional</strong>, aplicando métodos clássicos e modernos de levantamento, georreferenciamento e cartografia, sempre em conformidade com as normas técnicas vigentes.
+                    </p>
+                    <p>
+                    Por meio da integração entre topografia clássica, fotogrametria e cartografia, desenvolvemos produtos que subsidiam o planejamento territorial, a regularização fundiária e a tomada de decisões técnicas com precisão, confiabilidade e rastreabilidade dos dados.
+                    </p>
+                    <p>
+                    Mais do que plantas e mapas, entregamos <strong>tranquilidade jurídica</strong>. Nossos serviços são executados com rigor técnico e responsabilidade profissional, garantindo que cada centímetro do território esteja corretamente medido, documentado, georreferenciado e valorizado, reduzindo riscos e assegurando segurança para proprietários, investidores e gestores públicos.
+                    </p>                    
+                    
+                    <div class="founders">
+                        <div class="founder-card">
+                            <img src="victor.jpeg" alt="Victor Gomes" class="founder-img">
+                            <h4>Victor Gomes</h4>
+                            <small>Sócio-Diretor Técnico</small>
+                            <p>Engenheiro Agrimensor e Cartógrafo, formado na UFBA, Especialista em Aerolevantamento, cadastro multifinalitário (REURB), Georreferenciamento e cadastro de imóveis rurais e urbanos e Desenvolvedor de Software e Banco de Dados</p>
+                        </div>
+                        <div class="founder-card">
+                            <img src="filipe.jpeg" alt="Filipe" class="founder-img">
+                            <h4>Filipe</h4>
+                            <small>Sócio-Diretor de Inovação</small>
+                            <p>Engenheiro Agrimensor e Cartógrafo, formado na UFBA, Especialista em Georreferenciamento Rural e Urbano, Regularização Fundiária, Projetos em Energias Renováveis Eolico e Solar, Geoprocessamento e Aerolevantamento com RPA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding services" id="servicos">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nossas <span>Soluções</span></h2>
+                <p>Rigor técnico, responsabilidade profissional e soluções completas para gestão territorial.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-map-marked-alt"></i></div>
+                    <h3>Georreferenciamento Rural</h3>
+                    <p class="service-desc">Regularize seu imóvel rural conforme a Lei nº 10.267, assegurando conformidade legal, acesso a crédito e segurança patrimonial.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Certificação SIGEF/INCRA</li>
+                        <li><i class="fas fa-check-circle"></i> CCIR, ITR e CAR</li>
+                        <li><i class="fas fa-check-circle"></i> Retificação de área e usucapião</li>
+                        <li><i class="fas fa-check-circle"></i> Desmembramento e remembramento</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-city"></i></div>
+                    <h3>Regularização Urbana & REURB</h3>
+                    <p class="service-desc">Atuação técnica em processos de regularização fundiária urbana, atendendo às modalidades REURB-S e REURB-E.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Projetos de parcelamento do solo</li>
+                        <li><i class="fas fa-check-circle"></i> Cadastro Técnico Multifinalitário</li>
+                        <li><i class="fas fa-check-circle"></i> Levantamento planialtimétrico</li>
+                        <li><i class="fas fa-check-circle"></i> Demarcação de limites urbanos</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-helicopter"></i></div>
+                    <h3>Aerolevantamento com Drones</h3>
+                    <p class="service-desc">Mapeamento aéreo aplicado à engenharia, integrando fotogrametria, topografia e cartografia.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Ortofotomosaicos georreferenciados</li>
+                        <li><i class="fas fa-check-circle"></i> Modelagem 3D e nuvem de pontos</li>
+                        <li><i class="fas fa-check-circle"></i> Cálculo de volumes técnicos</li>
+                        <li><i class="fas fa-check-circle"></i> Monitoramento territorial e agrícola</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="services-grid" style="margin-top: 40px;">
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-drafting-compass"></i></div>
+                    <h3>Cadastro e Planejamento Territorial</h3>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Cadastro Técnico Multifinalitário (CTM)</li>
+                        <li><i class="fas fa-check-circle"></i> Planta de quadra, lote e logradouro</li>
+                        <li><i class="fas fa-check-circle"></i> Atualização cadastral urbana</li>
+                        <li><i class="fas fa-check-circle"></i> Apoio técnico a Planos Diretores Municipais</li>
+                        <li><i class="fas fa-check-circle"></i> Mapeamento de áreas de risco</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-hard-hat"></i></div>
+                    <h3>Obras e Infraestrutura</h3>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Locação e acompanhamento de obras</li>
+                        <li><i class="fas fa-check-circle"></i> Controle geométrico de obras lineares</li>
+                        <li><i class="fas fa-check-circle"></i> Levantamento <em>as built</em></li>
+                        <li><i class="fas fa-check-circle"></i> Monitoramento de deformações</li>
+                        <li><i class="fas fa-check-circle"></i> Cubagem e medições contratuais</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-balance-scale"></i></div>
+                    <h3>Atuação Legal e Pericial</h3>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Perícia técnica judicial e extrajudicial</li>
+                        <li><i class="fas fa-check-circle"></i> Assistência técnica em ações possessórias</li>
+                        <li><i class="fas fa-check-circle"></i> Laudos técnicos de confrontação e limites</li>
+                        <li><i class="fas fa-check-circle"></i> Apoio técnico a cartórios de registro</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" id="tecnologias" style="background: var(--cor-fundo-claro);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Infraestrutura <span>Tecnológica</span></h2>
+                <p>Equipamentos, métodos e softwares profissionais empregados nos levantamentos, processamento e validação técnica dos dados geoespaciais.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-drone"></i></div>
+                    <h3>Aerolevantamento</h3>
+                    <p class="service-desc">Plataformas aéreas não tripuladas (UAS) aplicadas conforme normas técnicas vigentes.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> DJI Mavic 3 Multispectral</li>
+                        <li><i class="fas fa-check-circle"></i> Sensores RGB e Multiespectral</li>
+                        <li><i class="fas fa-check-circle"></i> Planejamento conforme NBR 17146 / 17209</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-satellite"></i></div>
+                    <h3>Posicionamento Geodésico</h3>
+                    <p class="service-desc">Tecnologias GNSS de alta precisão para apoio, controle e validação de levantamentos.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> RTK, RTX e PPP</li>
+                        <li><i class="fas fa-check-circle"></i> Estação Total</li>
+                        <li><i class="fas fa-check-circle"></i> Nível Óptico e Digital</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-layer-group"></i></div>
+                    <h3>Processamento CAD & GIS</h3>
+                    <p class="service-desc">Ambiente técnico integrado para processamento cartográfico, topográfico e geoespacial.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> AutoCAD e Civil 3D</li>
+                        <li><i class="fas fa-check-circle"></i> QGIS e ArcGIS</li>
+                        <li><i class="fas fa-check-circle"></i> Global Mapper</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box"><i class="fas fa-ruler-combined"></i></div>
+                    <h3>Topografia Digital</h3>
+                    <p class="service-desc">Softwares especializados para cálculo, ajustamento e geração de peças técnicas.</p>
+                    <ul class="service-list">
+                        <li><i class="fas fa-check-circle"></i> Métrica Topo</li>
+                        <li><i class="fas fa-check-circle"></i> Topograph</li>
+                        <li><i class="fas fa-check-circle"></i> Topcon Tools</li>
+                        <li><i class="fas fa-check-circle"></i> Emlid Studio</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" id="curso-drone" style="background: linear-gradient(135deg, var(--cor-primaria), #153a52); color: #fff;">
+        <div class="container">
+            <div class="about-grid" style="align-items: center;">
+                <div class="about-text">
+                    <span class="hero-tag" style="background: rgba(255,255,255,0.1); border-color: var(--cor-destaque); color: var(--cor-destaque);">GeoAgreste Academy</span>
+                    <h2 style="color: #fff; font-size: 2.5rem; margin-bottom: 20px;">Curso de Piloto Profissional de RPA (Drones)</h2>
+                    <p style="color: #ddd; font-size: 1.1rem; margin-bottom: 20px;">
+                        Capacite-se com a diretoria técnica da GeoAgreste! Nosso curso online foi rigorosamente desenvolvido para formar pilotos conscientes e tecnicamente preparados para atuar de forma profissional em mapeamento, engenharia e aerolevantamentos.
+                    </p>
+                    
+                    <ul class="service-list" style="margin-bottom: 30px;">
+                        <li style="color: #ddd; align-items: center;"><i class="fas fa-layer-group" style="color: var(--cor-destaque); font-size: 1.2rem;"></i> <strong style="color: #fff; margin-right: 5px;">8 Módulos Completos:</strong> Aprenda fundamentos, regulamentação (ANAC/DECEA), meteorologia, sistemas embarcados e planejamento seguro de voo (Carga de 40h).</li>
+                        <li style="color: #ddd; align-items: center;"><i class="fas fa-laptop-code" style="color: var(--cor-destaque); font-size: 1.2rem;"></i> <strong style="color: #fff; margin-right: 5px;">Plataforma Exclusiva (LMS):</strong> Acesso a materiais oficiais em PDF, videoaulas detalhadas e contato direto através do nosso Fórum Técnico de Dúvidas.</li>
+                        <li style="color: #ddd; align-items: center;"><i class="fas fa-file-signature" style="color: var(--cor-destaque); font-size: 1.2rem;"></i> <strong style="color: #fff; margin-right: 5px;">Avaliação Rigorosa:</strong> Para garantir a validade técnica, o aluno deve concluir 100% das aulas e atingir a nota mínima de 70% na Prova Final oficial.</li>
+                        <li style="color: #ddd; align-items: center;"><i class="fas fa-award" style="color: var(--cor-destaque); font-size: 1.2rem;"></i> <strong style="color: #fff; margin-right: 5px;">Certificado Profissional:</strong> Ao final, receba o seu diploma assinado garantindo sua capacidade técnica de operação.</li>
+                        <li style="color: #ddd; align-items: center;"><i class="fas fa-wallet" style="color: var(--cor-destaque); font-size: 1.2rem;"></i> <strong style="color: #fff; margin-right: 5px;">Investimento:</strong> Taxa única de apenas <strong>R$ 800,00</strong>. Possui garantia de reembolso integral em até 3 dias!</li>
+                    </ul>
+
+                    <a href="https://geoagresteacademy.netlify.app" target="_blank" class="btn" style="font-size: 1.1rem; padding: 15px 35px; border-radius: 8px;">
+                        <i class="fas fa-rocket" style="margin-right: 10px;"></i> Acessar a Plataforma do Curso
+                    </a>
+                </div>
+                
+                <div class="about-img" style="text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Plataforma de Curso de Drone" style="border: 4px solid var(--cor-destaque); border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="compliance-section" id="normativas">
+        <div class="container">
+            <div class="compliance-intro">
+                <span class="hero-tag" style="background: rgba(255,255,255,0.2); color:#fff; border-color:transparent;">Segurança Jurídica</span>
+                <h2>Conformidade Técnica e Jurídica</h2>
+                <p style="color:#ddd;">Todos os serviços executados pela GeoAgreste possuem respaldo técnico, normativo e legal, garantindo validade em órgãos públicos e instituições financeiras.</p>
+            </div>
+
+            <div class="compliance-grid">
+                <div class="compliance-box">
+                    <div class="compliance-title">
+                        <i class="fas fa-ruler-combined"></i>
+                        <h3>Normas Técnicas (ABNT)</h3>
+                    </div>
+                    <div class="agency-list">
+                        <div class="agency-tag"><span class="norm-category">Levantamentos</span><i class="fas fa-check"></i> ABNT NBR 13.133</div>
+                        <div class="agency-tag"><span class="norm-category">Cadastros</span><i class="fas fa-check"></i> ABNT NBR 14.166</div>
+                        <div class="agency-tag"><span class="norm-category">Sistemas Espaciais</span><i class="fas fa-check"></i> ABNT NBR ISO 19.111</div>
+                        <div class="agency-tag"><span class="norm-category">Aéreo/Drone</span><i class="fas fa-check"></i> NBR 17146 / 17209:2025</div>
+                    </div>
+                </div>
+
+                <div class="compliance-box">
+                    <div class="compliance-title">
+                        <i class="fas fa-tractor"></i>
+                        <h3>Legislação Rural</h3>
+                    </div>
+                    <div class="agency-list">
+                        <div class="agency-tag"><span class="norm-category">Georreferenciamento</span><i class="fas fa-balance-scale"></i> Lei Federal nº 10.267/2001</div>
+                        <div class="agency-tag"><span class="norm-category">Regulamentação</span><i class="fas fa-balance-scale"></i> Decreto nº 4.449/2002</div>
+                        <div class="agency-tag"><span class="norm-category">Procedimentos</span><i class="fas fa-balance-scale"></i> IN INCRA nº 77/2013</div>
+                        <div class="agency-tag"><span class="norm-category">Certificação</span><i class="fas fa-balance-scale"></i> SIGEF/INCRA</div>
+                    </div>
+                </div>
+
+                <div class="compliance-box">
+                    <div class="compliance-title">
+                        <i class="fas fa-building"></i>
+                        <h3>Regularização Urbana</h3>
+                    </div>
+                    <div class="agency-list">
+                        <div class="agency-tag"><span class="norm-category">REURB</span><i class="fas fa-file-contract"></i> Lei Federal nº 13.465/2017</div>
+                        <div class="agency-tag"><span class="norm-category">Regulamentação</span><i class="fas fa-file-contract"></i> Decreto nº 9.310/2018</div>
+                        <div class="agency-tag"><span class="norm-category">Parcelamento</span><i class="fas fa-file-contract"></i> Lei nº 6.766/1979</div>
+                        <div class="agency-tag"><span class="norm-category">Ambiental</span><i class="fas fa-leaf"></i> Código Florestal 12.651/12</div>
+                    </div>
+                </div>
+
+                <div class="compliance-box">
+                    <div class="compliance-title">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>Responsabilidade</h3>
+                    </div>
+                    <div class="agency-list">
+                        <div class="agency-tag"><span class="norm-category">Exercício Profissional</span><i class="fas fa-award"></i> Lei Federal nº 5.194/1966</div>
+                        <div class="agency-tag"><span class="norm-category">Registro</span><i class="fas fa-award"></i> Resolução CONFEA 1.025 (ART)</div>
+                        <div class="agency-tag"><span class="norm-category">Aéreo (Drones)</span><i class="fas fa-plane"></i> Regulação ANAC / DECEA</div>
+                        <div class="agency-tag"><span class="norm-category">Regional</span><i class="fas fa-map-marker-alt"></i> Normas INEMA / Prefeituras</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" id="portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h2>Trabalhos <span>Realizados</span></h2>
+                <p>Confira o rigor técnico aplicado em nossos projetos recentes.</p>
+            </div>
+
+            <div class="admin-controls" id="adminControls">
+                <button class="btn" style="padding: 10px 20px; font-size:0.9rem;" onclick="openAddProjectModal()"><i class="fas fa-plus"></i> Adicionar Trabalho</button>
+                <button class="btn" style="padding: 10px 20px; font-size:0.9rem; background: #e74c3c; border-color: #e74c3c; color: white;" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Sair do Admin</button>
+            </div>
+
+            <div class="portfolio-filter">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="rural">Rural</button>
+                <button class="filter-btn" data-filter="urbano">Urbano</button>
+                <button class="filter-btn" data-filter="drone">Drone/3D</button>
+            </div>
+
+            <div class="portfolio-grid" id="portfolioContainer">
+                </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: var(--cor-fundo-claro);">
+        <div class="container">
+            <div class="section-title">
+                <h2>O que dizem nossos <span>Clientes</span></h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p style="font-style: italic; margin-bottom: 20px;">"A GeoAgreste resolveu a pendência de 20 anos na documentação da minha fazenda. O processo no SIGEF foi aprovado sem correções."</p>
+                    <h5 style="color: var(--cor-primaria);">Ricardo Menezes</h5>
+                    <small>Produtor Rural</small>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p style="font-style: italic; margin-bottom: 20px;">"Agilidade impressionante no levantamento com drone para o nosso loteamento. Os dados 3D facilitaram demais o projeto da engenharia."</p>
+                    <h5 style="color: var(--cor-primaria);">Eng. Letícia Santos</h5>
+                    <small>Diretora Técnica - Construtora</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding faq-section" id="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>Dúvidas <span>Frequentes</span></h2>
+                <p>Informações técnicas essenciais para proprietários e investidores.</p>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="faq-category-title">Área Rural e Georreferenciamento</div>
+                <div class="accordion-item">
+                    <div class="accordion-header">1. Por que preciso certificar meu imóvel no SIGEF/INCRA? <i class="fas fa-plus"></i></div>
+                    <div class="accordion-content">
+                        <p>A certificação é obrigatória para qualquer alteração no registro do imóvel (venda, desmembramento) e para acesso a crédito rural. Ela garante que não haja sobreposição de áreas entre vizinhos.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">2. O que acontece se eu não fizer o Georreferenciamento no prazo? <i class="fas fa-plus"></i></div>
+                    <div class="accordion-content">
+                        <p>O proprietário fica impedido de transferir o imóvel, registrar heranças ou desmembramentos, além de perder acesso a financiamentos bancários.</p>
+                    </div>
+                </div>
+
+                <div class="faq-category-title">Regularização Urbana (REURB)</div>
+                <div class="accordion-item">
+                    <div class="accordion-header">3. Só tenho o recibo de compra e venda. Posso tirar a escritura? <i class="fas fa-plus"></i></div>
+                    <div class="accordion-content">
+                        <p>Sim! Através da REURB, realizamos o levantamento e o projeto jurídico necessário para transformar sua posse em propriedade definitiva com matrícula no Cartório.</p>
+                    </div>
+                </div>
+
+                <div class="faq-category-title">Tecnologia e Drones</div>
+                <div class="accordion-item">
+                    <div class="accordion-header">4. O que é a tecnologia RTK/PPK nos drones? <i class="fas fa-plus"></i></div>
+                    <div class="accordion-content">
+                        <p>São sistemas de correção de posicionamento que permitem que cada foto tenha uma coordenada exata com erro de poucos centímetros, garantindo precisão absoluta no mapa final.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">5. Vocês seguem a nova norma NBR 17209 para drones? <i class="fas fa-plus"></i></div>
+                    <div class="accordion-content">
+                        <p>Sim. Todos os nossos levantamentos aéreos seguem o rigor da NBR 17209 (2025), garantindo validade técnica e jurídica em todos os projetos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" id="contato">
+        <div class="container">
+            <div class="contact-advanced">
+                <div style="text-align: center; margin-bottom: 40px; position:relative; z-index:1;">
+                    <h2>Solicite um Orçamento Técnico</h2>
+                    <p>Preencha os detalhes para uma análise preliminar gratuita da sua demanda.</p>
+                </div>
+                
+                <form class="form-grid-adv">
+                    <div class="form-group-adv">
+                        <label>Nome Completo</label>
+                        <input type="text" placeholder="Ex: João Silva" required>
+                    </div>
+                    <div class="form-group-adv">
+                        <label>WhatsApp (com DDD)</label>
+                        <input type="tel" placeholder="(71) 9.XXXX-XXXX" required>
+                    </div>
+                    <div class="form-group-adv">
+                        <label>Serviço de Interesse</label>
+                        <select required>
+                            <option value="">Selecione...</option>
+                            <option>Georreferenciamento Rural</option>
+                            <option>Regularização Urbana (REURB)</option>
+                            <option>Levantamento com Drone / 3D</option>
+                            <option>Topografia de Obra</option>
+                            <option>Combo Rural (CCIR/ITR/CAR)</option>
+                        </select>
+                    </div>
+                    <div class="form-group-adv">
+                        <label>Área Aproximada (ha ou m²)</label>
+                        <input type="text" placeholder="Ex: 50 hectares">
+                    </div>
+                    <div class="form-group-adv full-width-adv">
+                        <label>Localização do Imóvel (Município/UF)</label>
+                        <input type="text" placeholder="Ex: Salvador/BA">
+                    </div>
+                    <div class="form-group-adv full-width-adv">
+                        <label>Mensagem ou Observação</label>
+                        <textarea rows="4" placeholder="Conte-nos brevemente o objetivo do serviço..."></textarea>
+                    </div>
+                    <button type="submit" class="btn full-width-adv" style="background: #fff; color: var(--cor-primaria); box-shadow:none;">Enviar para Análise Técnica</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="footer-logo">GEOAGRESTE</a>
+                    <p>Engenharia Cartográfica com rigor técnico e segurança jurídica. Atuamos na fronteira da tecnologia para proteger seu patrimônio.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#sobre">A Empresa</a></li>
+                        <li><a href="#servicos">Serviços</a></li>
+                        <li><a href="#portfolio">Portfólio</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Área de Atuação</h4>
+                    <p style="font-size: 0.85rem; color: #888;">Salvador e atendimento técnico especializado em todo o Brasil.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Fale Conosco</h4>
+                    <ul>
+                        <li class="contact-li"><i class="fas fa-envelope"></i> geoagreste.engenharia@gmail.com</li>
+                        <li class="contact-li"><i class="fab fa-whatsapp"></i> (71) 985036763</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 GeoAgreste Engenharia. Todos os direitos reservados.</p>
+                <p>
+                    Precisão em cada coordenada. 
+                    <i class="fas fa-lock" style="margin-left: 10px; cursor: pointer; opacity: 0.2; transition: 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'" onclick="openLoginModal()" title="Acesso Restrito"></i>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/5571985036763" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <h3>Login Administrativo</h3>
+            <div class="admin-form-group">
+                <label>Usuário</label>
+                <input type="text" id="adminUser" placeholder="Digite o usuário">
+            </div>
+            <div class="admin-form-group">
+                <label>Senha</label>
+                <input type="password" id="adminPass" placeholder="Digite a senha">
+            </div>
+            <div class="admin-btns">
+                <button class="btn" style="flex: 1;" onclick="doLogin()">Entrar</button>
+                <button class="btn btn-outline" style="flex: 1; border-color: #ccc; color: #555;" onclick="closeModals()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal-box">
+            <h3>Novo Trabalho</h3>
+            <div class="admin-form-group">
+                <label>Título do Projeto</label>
+                <input type="text" id="projTitle" placeholder="Ex: Levantamento Residencial...">
+            </div>
+            <div class="admin-form-group">
+                <label>Categoria</label>
+                <select id="projCat">
+                    <option value="rural">Rural</option>
+                    <option value="urbano">Urbano</option>
+                    <option value="drone">Drone/3D</option>
+                </select>
+            </div>
+            <div class="admin-form-group">
+                <label>URL da Imagem ou Vídeo (.mp4)</label>
+                <input type="text" id="projMedia" placeholder="Link da foto/vídeo">
+            </div>
+            <div class="admin-form-group">
+                <label>Descrição Breve</label>
+                <textarea id="projDesc" rows="3" placeholder="Detalhes técnicos..."></textarea>
+            </div>
+            <div class="admin-btns">
+                <button class="btn" style="flex: 1;" onclick="saveProject()">Salvar Projeto</button>
+                <button class="btn btn-outline" style="flex: 1; border-color: #ccc; color: #555;" onclick="closeModals()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Accordion (FAQ)
+        const acc = document.getElementsByClassName("accordion-header");
+        for (let i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                const icon = this.querySelector('i');
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                    icon.classList.replace('fa-minus', 'fa-plus');
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                    icon.classList.replace('fa-plus', 'fa-minus');
+                } 
+            });
+        }
+
+        // 2. Menu Mobile
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        menuToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => { navMenu.classList.remove('active'); }));
+
+        // 3. SISTEMA DE PORTFÓLIO (ADMIN & RENDERIZAÇÃO)
+        let isAdmin = localStorage.getItem('geoagreste_admin') === 'true';
+
+        // Trabalhos Padrões Iniciais
+        const defaultProjects = [
+            { id: 1, cat: 'rural', title: 'Fazenda Boa Esperança', desc: 'Georreferenciamento e certificação SIGEF de 2.500 hectares.', media: 'https://images.unsplash.com/photo-1625246333195-58197bd47d26?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' },
+            { id: 2, cat: 'urbano', title: 'Residencial Vista Verde', desc: 'Levantamento planialtimétrico e projeto de loteamento.', media: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' },
+            { id: 3, cat: 'drone', title: 'Inspeção Solar Tech', desc: 'Mapeamento térmico e modelagem 3D de usina fotovoltaica.', media: 'https://images.unsplash.com/photo-1579829366248-204fe8413f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' },
+            { id: 4, cat: 'rural', title: 'Sítio São João', desc: 'Retificação de área administrativa e desmembramento familiar.', media: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }
+        ];
+
+        let projects = JSON.parse(localStorage.getItem('geoagreste_projects')) || defaultProjects;
+
+        function renderPortfolio() {
+            const container = document.getElementById('portfolioContainer');
+            container.innerHTML = '';
+
+            projects.forEach(proj => {
+                const isVideo = proj.media.toLowerCase().match(/\.(mp4|webm|ogg)$/);
+                const mediaTag = isVideo 
+                    ? `<video src="${proj.media}" class="portfolio-media" autoplay loop muted playsinline></video>`
+                    : `<img src="${proj.media}" class="portfolio-media" alt="${proj.title}">`;
+
+                const btnDelete = isAdmin ? `<button class="btn-delete-proj" style="display:block;" onclick="deleteProject(${proj.id})"><i class="fas fa-trash"></i></button>` : '';
+
+                const itemHTML = `
+                    <div class="portfolio-item" data-category="${proj.cat}">
+                        ${btnDelete}
+                        ${mediaTag}
+                        <div class="portfolio-overlay">
+                            <span class="portfolio-cat">${proj.cat === 'drone' ? 'Drone/3D' : proj.cat}</span>
+                            <h4>${proj.title}</h4>
+                            <p>${proj.desc}</p>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHTML;
+            });
+
+            document.getElementById('adminControls').style.display = isAdmin ? 'block' : 'none';
+            applyFilter();
+        }
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        function applyFilter() {
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const filterValue = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+            const items = document.querySelectorAll('.portfolio-item');
+            
+            items.forEach(item => {
+                if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                applyFilter();
+            });
+        });
+
+        function openLoginModal() { if(!isAdmin) document.getElementById('loginModal').style.display = 'flex'; }
+        function openAddProjectModal() { document.getElementById('projectModal').style.display = 'flex'; }
+        function closeModals() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('projectModal').style.display = 'none';
+            document.getElementById('adminUser').value = '';
+            document.getElementById('adminPass').value = '';
+        }
+
+        function doLogin() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            if(user === 'insira seu login' && pass === 'insira sua senha') {
+                isAdmin = true;
+                localStorage.setItem('geoagreste_admin', 'true');
+                closeModals();
+                renderPortfolio();
+                alert('Modo Administrador ativado!');
+            } else {
+                alert('Credenciais incorretas.');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            localStorage.setItem('geoagreste_admin', 'false');
+            renderPortfolio();
+        }
+
+        function saveProject() {
+            const title = document.getElementById('projTitle').value;
+            const cat = document.getElementById('projCat').value;
+            const media = document.getElementById('projMedia').value;
+            const desc = document.getElementById('projDesc').value;
+
+            if(!title || !media) { alert('Título e URL da Mídia são obrigatórios!'); return; }
+
+            const newProj = { id: Date.now(), cat, title, media, desc };
+            projects.unshift(newProj);
+            localStorage.setItem('geoagreste_projects', JSON.stringify(projects));
+            
+            document.getElementById('projTitle').value = '';
+            document.getElementById('projMedia').value = '';
+            document.getElementById('projDesc').value = '';
+            
+            closeModals();
+            renderPortfolio();
+        }
+
+        function deleteProject(id) {
+            if(confirm('Tem certeza que deseja apagar este trabalho?')) {
+                projects = projects.filter(p => p.id !== id);
+                localStorage.setItem('geoagreste_projects', JSON.stringify(projects));
+                renderPortfolio();
+            }
+        }
+
+        window.onload = renderPortfolio;
+
+    </script>
+</body>
+</html>
