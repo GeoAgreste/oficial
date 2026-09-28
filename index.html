@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoAgreste - Soluções Cartográficas e Regularização Fundiária</title>
+    
+    <!-- Tailwind CSS e FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Fontes do Sistema -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cor-primaria: #1b3d22; 
+            --cor-secundaria: #2a6136; 
+            --cor-destaque: #7ab829; 
+            --texto-claro: #ffffff;
+            --fundo-cinza: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--fundo-cinza);
+            color: #334155;
+            overflow-y: scroll;
+        }
+
+        /* Animações Suaves */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .hero {
+            background: linear-gradient(rgba(27, 61, 34, 0.85), rgba(42, 97, 54, 0.85)), url('https://images.unsplash.com/photo-1579762593175-20226054cad0?auto=format&fit=crop&q=80&w=1920') center/cover;
+        }
+
+        .hero h1 { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
+        .hero p { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; animation-delay: 0.3s; }
+        .hero .hero-buttons { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; animation-delay: 0.5s; }
+        .hero .slider-container { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; animation-delay: 0.7s; }
+
+        .btn-primary {
+            background-color: var(--cor-destaque);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #659a22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(122, 184, 41, 0.3);
+        }
+
+        .text-primaria { color: var(--cor-primaria); }
+        .text-destaque { color: var(--cor-destaque); }
+        .bg-primaria { background-color: var(--cor-primaria); }
+        .bg-destaque { background-color: var(--cor-destaque); }
+
+        /* Painel Admin */
+        .admin-only { display: none !important; }
+        body.admin-mode .admin-only { display: inline-flex !important; }
+        body.admin-mode .admin-only-block { display: block !important; }
+
+        .portfolio-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
+        }
+        
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Sistema de Abas (SPA) */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Links do Menu Nav */
+        .nav-link { border-bottom: 2px solid transparent; }
+        .nav-link.active { border-bottom-color: var(--cor-destaque); color: white; }
+
+        /* Menu de navegação para celulares (Android/iOS) */
+        .mobile-menu-button { display: none; }
+        .mobile-nav { display: none; }
+
+        @media (max-width: 767px) {
+            .mobile-menu-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border: 1px solid rgba(255,255,255,0.25);
+                border-radius: 10px;
+                color: white;
+                background: rgba(255,255,255,0.08);
+                font-size: 1.2rem;
+                margin-left: 0.25rem;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .mobile-nav {
+                display: none;
+                padding: 0 1rem 1rem;
+            }
+
+            .mobile-nav.open {
+                display: block;
+            }
+
+            .mobile-nav-inner {
+                display: flex;
+                flex-direction: column;
+                gap: 0.35rem;
+                padding: 0.65rem;
+                background: rgba(0,0,0,0.18);
+                border: 1px solid rgba(255,255,255,0.12);
+                border-radius: 14px;
+            }
+
+            .mobile-nav .mobile-nav-link {
+                width: 100%;
+                text-align: left;
+                color: #fff;
+                background: transparent;
+                border: 0;
+                border-radius: 10px;
+                padding: 0.8rem 0.9rem;
+                font-size: 0.95rem;
+                font-weight: 600;
+            }
+
+            .mobile-nav .mobile-nav-link:hover,
+            .mobile-nav .mobile-nav-link.active {
+                background: rgba(122,184,41,0.22);
+                color: #fff;
+            }
+        }
+
+        /* ================= NOVOS ESTILOS: DARK MODE & GLASSMORPHISM ================= */
+        .section-bg {
+            background-size: cover !important;
+            background-position: center !important;
+            background-attachment: fixed !important;
+        }
+        .bg-sobre { background-image: linear-gradient(rgba(27, 61, 34, 0.88), rgba(42, 97, 54, 0.88)), url('https://images.unsplash.com/photo-1541888086425-d81bb19240f5?auto=format&fit=crop&q=80&w=1920'); }
+        .bg-servicos { background-image: linear-gradient(rgba(27, 61, 34, 0.88), rgba(42, 97, 54, 0.88)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1920'); }
+        .bg-cursos { background-image: linear-gradient(rgba(27, 61, 34, 0.88), rgba(42, 97, 54, 0.88)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1920'); }
+        .bg-solucoes { background-image: linear-gradient(rgba(27, 61, 34, 0.88), rgba(42, 97, 54, 0.88)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1920'); }
+        .bg-portfolio { background-image: linear-gradient(rgba(27, 61, 34, 0.88), rgba(42, 97, 54, 0.88)), url('https://images.unsplash.com/photo-1623869680373-c6b22b64d04c?auto=format&fit=crop&q=80&w=1920'); }
+
+        .glass-card {
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* Animação Marquee do Slider (9 Itens) */
+        .slider-container {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding: 10px 0;
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .slider-track {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            animation: scroll-marquee 40s linear infinite;
+        }
+        .slider-track:hover {
+            animation-play-state: paused;
+        }
+        .slider-item {
+            width: 290px;
+            flex-shrink: 0;
+        }
+        @keyframes scroll-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 0.75rem)); }
+        }
+
+        /* Estilos Específicos da Seção Quem Somos (Adaptado para Dark) */
+        .secao-empresa-wrapper { font-family: 'Open Sans', sans-serif; color: #e2e8f0; }
+        .section-title { text-align: center; margin-bottom: 30px; position: relative; }
+        .section-title h2 { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 700; color: #ffffff; margin-bottom: 0.8rem; line-height: 1.2; }
+        .section-title span.destaque-txt { color: #7ab829; }
+        .section-title p { font-size: 0.95rem; color: #cbd5e1; max-width: 700px; margin: 0 auto; line-height: 1.5; }
+        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: #7ab829; margin: 10px auto 0; border-radius: 2px; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+
+        .dashboard-bar { min-height: 8px; }
+
+
+        /* ============================================================
+           RESPONSIVIDADE AVANÇADA — ANDROID / iOS
+           Mantém o layout desktop original e amplia o comportamento
+           visual para telas pequenas sem alterar a lógica do sistema.
+           ============================================================ */
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        img,
+        video,
+        iframe {
+            max-width: 100%;
+        }
+
+        button,
+        a,
+        input,
+        textarea,
+        select {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ---------------- TABLET / TELAS INTERMEDIÁRIAS ---------------- */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .hero {
+                min-height: 82vh;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.6rem, 5vw, 4rem) !important;
+                line-height: 1.08 !important;
+            }
+
+            .hero p {
+                font-size: 1rem !important;
+                line-height: 1.65 !important;
+            }
+
+            .slider-item {
+                width: 260px;
+            }
+
+            .section-bg {
+                background-attachment: scroll !important;
+            }
+
+            footer .grid {
+                gap: 2rem !important;
+            }
+        }
+
+        /* ---------------- SMARTPHONES ANDROID / iOS ---------------- */
+        @media (max-width: 767px) {
+
+            /* Base */
+            html {
+                font-size: 15px;
+                scroll-behavior: smooth;
+                overflow-x: hidden;
+            }
+
+            body {
+                width: 100%;
+                min-width: 0;
+                overflow-x: hidden;
+                font-size: 0.94rem;
+                line-height: 1.55;
+            }
+
+            main {
+                width: 100%;
+                min-width: 0;
+            }
+
+            /* Evita que palavras, e-mails e URLs longas estourem os cards */
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p,
+            span,
+            li,
+            a,
+            button {
+                overflow-wrap: anywhere;
+                word-break: normal;
+            }
+
+            /* ---------------- CABEÇALHO ---------------- */
+            header {
+                width: 100%;
+            }
+
+            header > div {
+                width: 100%;
+            }
+
+            header .h-20 {
+                height: 4.25rem !important;
+                min-height: 4.25rem;
+            }
+
+            header .max-w-7xl {
+                padding-left: 0.85rem !important;
+                padding-right: 0.85rem !important;
+            }
+
+            header img {
+                height: 2.65rem !important;
+                max-height: 2.65rem;
+            }
+
+            header .flex.items-center.gap-3 {
+                gap: 0.55rem !important;
+                min-width: 0;
+            }
+
+            header .flex.items-center.gap-4 {
+                gap: 0.55rem !important;
+                flex-shrink: 0;
+            }
+
+            header .text-xl {
+                font-size: 1rem !important;
+            }
+
+            header .text-xl.fa-instagram {
+                font-size: 1.2rem !important;
+            }
+
+            .mobile-menu-button {
+                width: 2.7rem !important;
+                height: 2.7rem !important;
+                min-width: 2.7rem;
+                border-radius: 0.75rem !important;
+                font-size: 1rem !important;
+                margin-left: 0 !important;
+            }
+
+            .mobile-nav {
+                padding: 0 0.2rem 0.7rem !important;
+            }
+
+            .mobile-nav-inner {
+                gap: 0.2rem !important;
+                padding: 0.45rem !important;
+                border-radius: 0.85rem !important;
+            }
+
+            .mobile-nav .mobile-nav-link {
+                padding: 0.72rem 0.8rem !important;
+                min-height: 2.75rem;
+                font-size: 0.88rem !important;
+                line-height: 1.25;
+            }
+
+            /* ---------------- ESTRUTURA DAS ABAS ---------------- */
+            .tab-content {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .section-bg {
+                background-attachment: scroll !important;
+                background-position: center center !important;
+                background-size: cover !important;
+            }
+
+            /* Reduz o espaçamento vertical gigantesco do desktop */
+            #sobre,
+            #servicos,
+            #cursos,
+            #solucoes,
+            #portfolio {
+                min-height: 0 !important;
+            }
+
+            #sobre {
+                padding-top: 2.4rem !important;
+                padding-bottom: 3rem !important;
+            }
+
+            #servicos,
+            #cursos,
+            #solucoes,
+            #portfolio {
+                padding-top: 2.75rem !important;
+                padding-bottom: 3.25rem !important;
+            }
+
+            /* ---------------- INÍCIO / HERO ---------------- */
+            .hero {
+                min-height: calc(100svh - 4.25rem) !important;
+                min-height: calc(100dvh - 4.25rem) !important;
+                height: auto;
+                padding: 4rem 0.95rem 2.5rem !important;
+                background-attachment: scroll !important;
+            }
+
+            .hero > div {
+                width: 100%;
+                max-width: 100%;
+                margin-top: 0 !important;
+            }
+
+            .hero h1 {
+                font-size: clamp(2rem, 9vw, 2.75rem) !important;
+                line-height: 1.08 !important;
+                letter-spacing: -0.045em;
+                margin-bottom: 1rem !important;
+            }
+
+            .hero p {
+                max-width: 100% !important;
+                font-size: 0.94rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .hero-buttons {
+                width: 100%;
+                gap: 0.65rem !important;
+                margin-bottom: 1.8rem !important;
+            }
+
+            .hero-buttons button {
+                width: 100%;
+                min-height: 2.9rem;
+                padding: 0.75rem 1rem !important;
+                font-size: 0.9rem !important;
+                line-height: 1.25;
+            }
+
+            .hero .slider-container {
+                width: 100%;
+                margin-bottom: 1rem !important;
+                padding: 0.35rem 0 !important;
+            }
+
+            .slider-track {
+                gap: 0.7rem !important;
+                animation-duration: 34s;
+            }
+
+            .slider-item {
+                width: min(72vw, 245px) !important;
+                padding: 1rem !important;
+                border-radius: 0.9rem !important;
+            }
+
+            .slider-item i {
+                font-size: 1.45rem !important;
+                margin-bottom: 0.55rem !important;
+            }
+
+            .slider-item h3 {
+                font-size: 0.88rem !important;
+                line-height: 1.3 !important;
+            }
+
+            .hero > div > div:last-child a {
+                max-width: 100%;
+                min-height: 2.8rem;
+                padding: 0.7rem 1rem !important;
+                font-size: 0.88rem !important;
+            }
+
+            /* ---------------- TÍTULOS DE SEÇÃO ---------------- */
+            .section-title {
+                margin-bottom: 1.7rem !important;
+                padding: 0 0.4rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.55rem !important;
+                line-height: 1.15 !important;
+                letter-spacing: -0.03em !important;
+            }
+
+            .section-title p {
+                font-size: 0.82rem !important;
+                line-height: 1.5 !important;
+            }
+
+            .section-title::after {
+                width: 2.8rem !important;
+                height: 2px !important;
+                margin-top: 0.65rem !important;
+            }
+
+            /* ---------------- CONTAINER GERAL ---------------- */
+            .max-w-7xl,
+            .max-w-6xl,
+            .max-w-5xl {
+                max-width: 100% !important;
+            }
+
+            #sobre > div,
+            #servicos > div,
+            #cursos > div,
+            #solucoes > div,
+            #portfolio > div,
+            #dashboard > div,
+            footer > div {
+                padding-left: 0.9rem !important;
+                padding-right: 0.9rem !important;
+            }
+
+            /* ---------------- QUEM SOMOS ---------------- */
+            #sobre .grid {
+                gap: 1rem !important;
+                margin-top: 1.25rem !important;
+            }
+
+            #sobre .glass-card {
+                border-radius: 1rem !important;
+            }
+
+            #sobre .glass-card.p-8,
+            #sobre .glass-card.md\:p-10 {
+                padding: 1.15rem !important;
+            }
+
+            #sobre h3 {
+                font-size: 1.25rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 1rem !important;
+            }
+
+            #sobre .space-y-5 {
+                gap: 0.85rem !important;
+            }
+
+            #sobre .space-y-5 p {
+                font-size: 0.84rem !important;
+                line-height: 1.62 !important;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 {
+                gap: 0.8rem !important;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 .glass-card {
+                padding: 1rem !important;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 img {
+                width: 4.2rem !important;
+                height: 4.2rem !important;
+                margin-bottom: 0.65rem !important;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 h4 {
+                font-size: 0.95rem !important;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 span {
+                font-size: 0.58rem !important;
+                line-height: 1.35 !important;
+                text-align: center;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 p {
+                font-size: 0.72rem !important;
+                line-height: 1.5 !important;
+            }
+
+            #sobre .glass-card .grid.grid-cols-1.sm\:grid-cols-3 {
+                gap: 0 !important;
+            }
+
+            #sobre .glass-card .grid.grid-cols-1.sm\:grid-cols-3 > div {
+                padding: 1rem 0 !important;
+            }
+
+            #sobre .glass-card .grid.grid-cols-1.sm\:grid-cols-3 > div:first-child {
+                padding-top: 0.25rem !important;
+            }
+
+            #sobre .glass-card .grid.grid-cols-1.sm\:grid-cols-3 > div:last-child {
+                padding-bottom: 0.25rem !important;
+            }
+
+            #sobre .glass-card .grid.grid-cols-1.sm\:grid-cols-3 p {
+                max-width: 19rem;
+                font-size: 0.72rem !important;
+            }
+
+            #sobre .glass-card .grid.grid-cols-1.sm\:grid-cols-3 ul {
+                font-size: 0.68rem !important;
+            }
+
+            /* ---------------- SERVIÇOS ---------------- */
+            #servicos > div > .text-center {
+                margin-bottom: 2rem !important;
+            }
+
+            #servicos > div > .text-center h2 {
+                font-size: 1.6rem !important;
+                line-height: 1.15 !important;
+            }
+
+            #servicos > div > .text-center .w-24 {
+                width: 3.25rem !important;
+                height: 2px !important;
+            }
+
+            #servicos .grid {
+                gap: 0.8rem !important;
+            }
+
+            #servicos .glass-card {
+                padding: 1.1rem !important;
+                border-radius: 0.95rem !important;
+            }
+
+            #servicos .glass-card > div:first-child {
+                width: 2.8rem !important;
+                height: 2.8rem !important;
+                margin-bottom: 0.8rem !important;
+                border-radius: 0.7rem !important;
+            }
+
+            #servicos .glass-card > div:first-child i {
+                font-size: 1.15rem !important;
+            }
+
+            #servicos .glass-card h3 {
+                font-size: 0.92rem !important;
+                line-height: 1.25 !important;
+                margin-bottom: 0.7rem !important;
+            }
+
+            #servicos .glass-card ul {
+                font-size: 0.76rem !important;
+                line-height: 1.45 !important;
+            }
+
+            #servicos .glass-card li {
+                align-items: flex-start;
+            }
+
+            #servicos .glass-card li i {
+                margin-top: 0.28rem !important;
+                margin-right: 0.4rem !important;
+                flex-shrink: 0;
+            }
+
+            /* ---------------- CURSOS ---------------- */
+            #cursos > div > .flex {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 0.8rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            #cursos h2 {
+                font-size: 1.55rem !important;
+                line-height: 1.15 !important;
+            }
+
+            #cursos .w-24 {
+                width: 3.25rem !important;
+                height: 2px !important;
+            }
+
+            #cursos .mt-4 {
+                margin-top: 0.7rem !important;
+            }
+
+            #cursos .glass-card {
+                border-radius: 1rem !important;
+            }
+
+            #courseList .course-row {
+                padding: 1rem !important;
+                gap: 0.7rem !important;
+            }
+
+            #courseList .course-row h4 {
+                font-size: 0.95rem !important;
+                line-height: 1.3 !important;
+            }
+
+            #courseList .course-row p {
+                font-size: 0.76rem !important;
+                line-height: 1.5 !important;
+            }
+
+            #courseList .course-row .bg-destaque\/20 {
+                font-size: 0.57rem !important;
+                padding: 0.3rem 0.45rem !important;
+                white-space: nowrap;
+            }
+
+            #courseList .course-row > div:last-child {
+                margin-top: 0.25rem !important;
+                gap: 0.45rem !important;
+            }
+
+            #courseList .course-row > div:last-child > a,
+            #courseList .course-row > div:last-child > button {
+                flex: 1 1 auto;
+                min-height: 2.55rem;
+                justify-content: center;
+                padding: 0.55rem 0.7rem !important;
+                font-size: 0.72rem !important;
+                line-height: 1.25;
+            }
+
+            #courseList .course-row .admin-only {
+                flex: 0 0 auto;
+                margin-left: 0 !important;
+            }
+
+            #courseList .course-row .admin-only button {
+                flex: 0 0 2.5rem;
+            }
+
+            #cursos .glass-card.border-destaque\/30 {
+                padding: 1.15rem !important;
+            }
+
+            #cursos .glass-card.border-destaque\/30 h3 {
+                font-size: 1rem !important;
+                line-height: 1.3 !important;
+                gap: 0.45rem !important;
+            }
+
+            #cursos .glass-card.border-destaque\/30 h3 i {
+                font-size: 0.95rem !important;
+            }
+
+            #cursos .glass-card.border-destaque\/30 p {
+                font-size: 0.78rem !important;
+                line-height: 1.55 !important;
+            }
+
+            #cursos .glass-card.border-destaque\/30 a {
+                width: 100%;
+                padding: 0.7rem 0.9rem !important;
+                font-size: 0.8rem !important;
+            }
+
+            /* ---------------- SOLUÇÕES DIGITAIS ---------------- */
+            #solucoes > div > .text-center {
+                margin-bottom: 2.2rem !important;
+            }
+
+            #solucoes h2 {
+                font-size: 1.55rem !important;
+                line-height: 1.15 !important;
+            }
+
+            #solucoes .w-24 {
+                width: 3.25rem !important;
+                height: 2px !important;
+            }
+
+            #solucoes .text-center > p {
+                font-size: 0.8rem !important;
+                line-height: 1.55 !important;
+            }
+
+            #solucoes .flex.flex-col.lg\:flex-row,
+            #solucoes .flex.flex-col.lg\:flex-row-reverse {
+                gap: 1.25rem !important;
+                margin-bottom: 1.4rem !important;
+                padding: 1rem !important;
+                border-radius: 1rem !important;
+            }
+
+            #solucoes .flex.flex-col.lg\:flex-row > div,
+            #solucoes .flex.flex-col.lg\:flex-row-reverse > div {
+                width: 100% !important;
+            }
+
+            #solucoes .flex.flex-col.lg\:flex-row img,
+            #solucoes .flex.flex-col.lg\:flex-row-reverse img {
+                width: 100%;
+                height: auto;
+                border-radius: 0.75rem;
+            }
+
+            #solucoes .inline-block {
+                max-width: 100%;
+                font-size: 0.62rem !important;
+                line-height: 1.3 !important;
+                padding: 0.35rem 0.65rem !important;
+                margin-bottom: 0.65rem !important;
+            }
+
+            #solucoes h3 {
+                font-size: 1.35rem !important;
+                line-height: 1.15 !important;
+            }
+
+            #solucoes h4 {
+                font-size: 0.9rem !important;
+                line-height: 1.35 !important;
+                margin-bottom: 0.8rem !important;
+            }
+
+            #solucoes .leading-relaxed {
+                font-size: 0.78rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 0.9rem !important;
+            }
+
+            #solucoes .grid {
+                gap: 0.55rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            #solucoes .grid > div {
+                font-size: 0.72rem !important;
+                line-height: 1.45 !important;
+            }
+
+            #solucoes .grid i {
+                flex-shrink: 0;
+                margin-top: 0.15rem !important;
+            }
+
+            #solucoes a.inline-flex {
+                width: 100%;
+                justify-content: center;
+                padding: 0.7rem 0.8rem !important;
+                font-size: 0.76rem !important;
+            }
+
+            /* ---------------- PORTFÓLIO ---------------- */
+            #portfolio > div > .flex {
+                align-items: flex-start !important;
+                margin-bottom: 1.5rem !important;
+                gap: 0.8rem !important;
+            }
+
+            #portfolio h2 {
+                font-size: 1.55rem !important;
+                line-height: 1.15 !important;
+            }
+
+            #portfolio .w-24 {
+                width: 3.25rem !important;
+                height: 2px !important;
+            }
+
+            #portfolioGrid {
+                grid-template-columns: 1fr !important;
+                gap: 0.8rem !important;
+            }
+
+            #portfolioGrid > div {
+                min-height: 0;
+                border-radius: 0.9rem !important;
+            }
+
+            #portfolioGrid .portfolio-overlay {
+                padding: 0.9rem !important;
+            }
+
+            #portfolioGrid .portfolio-overlay h4 {
+                font-size: 0.85rem !important;
+                line-height: 1.25 !important;
+            }
+
+            #portfolioGrid .admin-only button {
+                width: 2.2rem !important;
+                height: 2.2rem !important;
+            }
+
+            /* ---------------- DASHBOARD ---------------- */
+            #dashboard {
+                padding-top: 1.5rem !important;
+                padding-bottom: 2.5rem !important;
+            }
+
+            #dashboard .mb-8 {
+                margin-bottom: 1.2rem !important;
+            }
+
+            #dashboard h2 {
+                font-size: 1.45rem !important;
+                line-height: 1.2 !important;
+            }
+
+            #dashboard .text-sm {
+                font-size: 0.76rem !important;
+            }
+
+            #dashboard .grid {
+                gap: 0.7rem !important;
+            }
+
+            #dashboard .rounded-2xl {
+                border-radius: 0.9rem !important;
+            }
+
+            #dashboard .p-5,
+            #dashboard .p-6 {
+                padding: 1rem !important;
+            }
+
+            #dashboard .text-3xl {
+                font-size: 1.55rem !important;
+            }
+
+            #dashboard .h-56 {
+                height: 11rem !important;
+            }
+
+            #dashboard .text-xs {
+                font-size: 0.65rem !important;
+            }
+
+            #dashboard .gap-3 {
+                gap: 0.5rem !important;
+            }
+
+            /* ---------------- RODAPÉ ---------------- */
+            footer {
+                padding-top: 2.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+
+            footer > div {
+                width: 100%;
+            }
+
+            footer .grid {
+                gap: 1.7rem !important;
+                margin-bottom: 1.8rem !important;
+            }
+
+            footer .grid > div {
+                min-width: 0;
+            }
+
+            footer img {
+                height: 2.35rem !important;
+            }
+
+            footer .font-bold.text-xl {
+                font-size: 1rem !important;
+            }
+
+            footer p,
+            footer li,
+            footer span {
+                font-size: 0.75rem !important;
+                line-height: 1.55 !important;
+            }
+
+            footer h4 {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.7rem !important;
+            }
+
+            footer .space-y-2 {
+                gap: 0.25rem !important;
+            }
+
+            footer .space-y-3 {
+                gap: 0.55rem !important;
+            }
+
+            footer .border-t {
+                padding-top: 1.25rem !important;
+            }
+
+            footer .border-t p,
+            footer .border-t a {
+                font-size: 0.62rem !important;
+                text-align: center;
+                line-height: 1.45 !important;
+            }
+
+            footer .border-t .flex {
+                gap: 0.7rem !important;
+            }
+
+            /* ---------------- WHATSAPP FLUTUANTE ---------------- */
+            body > a.fixed.bottom-6.right-6 {
+                width: 3.1rem !important;
+                height: 3.1rem !important;
+                right: 0.85rem !important;
+                bottom: 0.85rem !important;
+                font-size: 1.45rem !important;
+            }
+
+            /* ---------------- MODAIS ---------------- */
+            .modal-backdrop {
+                padding: 0.7rem !important;
+                align-items: center !important;
+                overflow-y: auto;
+            }
+
+            .modal-backdrop > div {
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: calc(100svh - 1.4rem) !important;
+                max-height: calc(100dvh - 1.4rem) !important;
+                border-radius: 1rem !important;
+            }
+
+            .modal-backdrop .p-6 {
+                padding: 1rem !important;
+            }
+
+            .modal-backdrop h3 {
+                font-size: 1rem !important;
+                line-height: 1.25 !important;
+            }
+
+            .modal-backdrop input,
+            .modal-backdrop textarea,
+            .modal-backdrop select {
+                min-height: 2.65rem;
+                font-size: 0.82rem !important;
+            }
+
+            .modal-backdrop label {
+                font-size: 0.72rem !important;
+            }
+
+            .modal-backdrop button,
+            .modal-backdrop a {
+                font-size: 0.76rem !important;
+            }
+
+            /* Modal de informações de curso */
+            #modalCourseInfo .grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.55rem !important;
+            }
+
+            #modalCourseInfo .grid > div {
+                padding: 0.7rem !important;
+            }
+
+            #modalCourseInfo .overflow-y-auto {
+                font-size: 0.8rem;
+            }
+
+            /* ---------------- TOUCH / ACESSIBILIDADE ---------------- */
+            .mobile-nav-link,
+            .btn-primary,
+            button,
+            footer a,
+            footer button {
+                touch-action: manipulation;
+            }
+
+            .mobile-nav-link,
+            .btn-primary {
+                min-height: 2.65rem;
+            }
+
+            /* Desativa efeitos que podem ficar pesados no celular */
+            .glass-card {
+                -webkit-backdrop-filter: blur(8px);
+                backdrop-filter: blur(8px);
+            }
+
+            .slider-track:hover {
+                animation-play-state: running;
+            }
+        }
+
+        /* ---------------- SMARTPHONES MUITO PEQUENOS ---------------- */
+        @media (max-width: 380px) {
+            html {
+                font-size: 14px;
+            }
+
+            .hero {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+
+            .hero h1 {
+                font-size: 1.85rem !important;
+            }
+
+            .hero p {
+                font-size: 0.86rem !important;
+            }
+
+            .slider-item {
+                width: 72vw !important;
+            }
+
+            #sobre > div,
+            #servicos > div,
+            #cursos > div,
+            #solucoes > div,
+            #portfolio > div,
+            #dashboard > div,
+            footer > div {
+                padding-left: 0.72rem !important;
+                padding-right: 0.72rem !important;
+            }
+
+            #sobre .grid.grid-cols-1.sm\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+
+            #courseList .course-row > div:last-child > a,
+            #courseList .course-row > div:last-child > button {
+                flex-basis: 100%;
+            }
+
+            footer .border-t .flex {
+                flex-direction: column;
+            }
+        }
+
+        /* ---------------- TELAS GRANDES / DESKTOP ----------------
+           Reforça que os ajustes acima não alteram o desenho desktop. */
+        @media (min-width: 1024px) {
+            .section-bg {
+                background-attachment: fixed !important;
+            }
+        }
+
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- HEADER & CABEÇALHO -->
+    <header class="bg-primaria sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo Oficial da Pasta Local -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <img src="Sem_Fundo.png" alt="GeoAgreste Logo" class="h-12 w-auto object-contain p-1 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
+                    <span class="text-white font-bold text-xl tracking-tight hidden sm:inline">GeoAgreste</span>
+                </div>
+                
+                <!-- Menu Principal de Navegação -->
+                <nav class="hidden md:flex space-x-6">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-link active text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium">Início</button>
+                    <button onclick="switchTab('sobre')" id="nav-sobre" class="nav-link text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium">Quem Somos</button>
+                    <button onclick="switchTab('servicos')" id="nav-servicos" class="nav-link text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium">Serviços</button>
+                    <button onclick="switchTab('cursos')" id="nav-cursos" class="nav-link text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium">Cursos</button>
+                    <button onclick="switchTab('solucoes')" id="nav-solucoes" class="nav-link text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium">Soluções Digitais</button>
+                    <button onclick="switchTab('portfolio')" id="nav-portfolio" class="nav-link text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium">Portfólio</button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-link admin-only text-gray-200 hover:text-white transition px-2 py-2 text-sm font-medium"><i class="fa-solid fa-chart-line mr-1"></i>Dashboard</button>
+                </nav>
+
+                <!-- Ícones de Acesso & Redes Sociais -->
+                <div class="flex items-center gap-4">
+                    <a href="https://www.instagram.com/geo_agreste/" target="_blank" class="text-white hover:text-destaque transition text-xl" title="Siga nosso Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <button id="btnLogout" onclick="logout()" class="admin-only text-white hover:text-red-400 transition text-sm font-medium border border-white/30 rounded-full px-4 py-1.5 hover:bg-white/10">
+                        <i class="fa-solid fa-right-from-bracket mr-1.5"></i>Sair
+                    </button>
+                    <button id="mobileMenuButton" type="button" class="mobile-menu-button" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação" aria-expanded="false">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Menu exclusivo para celulares Android/iOS -->
+            <div id="mobileNav" class="mobile-nav">
+                <div class="mobile-nav-inner">
+                    <button onclick="switchTab('home'); closeMobileMenu();" id="mobile-nav-home" class="mobile-nav-link active">Início</button>
+                    <button onclick="switchTab('sobre'); closeMobileMenu();" id="mobile-nav-sobre" class="mobile-nav-link">Quem Somos</button>
+                    <button onclick="switchTab('servicos'); closeMobileMenu();" id="mobile-nav-servicos" class="mobile-nav-link">Serviços</button>
+                    <button onclick="switchTab('cursos'); closeMobileMenu();" id="mobile-nav-cursos" class="mobile-nav-link">Cursos</button>
+                    <button onclick="switchTab('solucoes'); closeMobileMenu();" id="mobile-nav-solucoes" class="mobile-nav-link">Soluções Digitais</button>
+                    <button onclick="switchTab('portfolio'); closeMobileMenu();" id="mobile-nav-portfolio" class="mobile-nav-link">Portfólio</button>
+                    <button onclick="switchTab('dashboard'); closeMobileMenu();" id="mobile-nav-dashboard" class="mobile-nav-link admin-only"><i class="fa-solid fa-chart-line mr-2"></i>Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- ================= ABA 1: INÍCIO ================= -->
+        <section id="home" class="tab-content active">
+            <div class="hero text-white py-28 px-4 relative overflow-hidden min-h-[88vh] flex flex-col justify-center">
+                <div class="max-w-5xl mx-auto text-center relative z-10 w-full -mt-20">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">Soluções Precisas em <span class="text-destaque">Engenharia e Gestão Fundiária</span></h1>
+                    <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto">A GeoAgreste é referência em aerolevantamento, georreferenciamento, regularização fundiária rural e urbana. Tecnologia de ponta aliada à expertise técnica para resultados precisos.</p>
+                    
+                    <div class="hero-buttons flex flex-col sm:flex-row justify-center gap-4 mb-14">
+                        <button onclick="switchTab('servicos')" class="btn-primary px-8 py-3 rounded-full font-semibold text-lg">Conheça Nossos Serviços</button>
+                        <button onclick="switchTab('cursos')" class="bg-white/10 border border-white/30 hover:bg-white/20 px-8 py-3 rounded-full font-semibold text-lg transition backdrop-blur-sm">Cursos de Capacitação</button>
+                    </div>
+
+                    <!-- Slider Infinito de 9 Itens (Movimento Horizontal) -->
+                    <div class="slider-container max-w-6xl mx-auto mb-8">
+                        <div class="slider-track" id="hero-slider-track">
+                            <!-- Item 1 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-satellite text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Tecnologia Avançada</h3>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-file-signature text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Regularização Ágil</h3>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-chalkboard-user text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Treinamento Especializado</h3>
+                            </div>
+                            <!-- Item 4 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-crosshairs text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Precisão Milimétrica</h3>
+                            </div>
+                            <!-- Item 5 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-cubes text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Modelagem 3D</h3>
+                            </div>
+                            <!-- Item 6 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-map-location-dot text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Mapeamento Aéreo</h3>
+                            </div>
+                            <!-- Item 7 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-laptop-code text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Sistemas GIS Web</h3>
+                            </div>
+                            <!-- Item 8 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-scale-balanced text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Segurança Jurídica</h3>
+                            </div>
+                            <!-- Item 9 -->
+                            <div class="slider-item glass-card p-6 rounded-xl shadow-lg hover:border-destaque/50 transition duration-300 text-left">
+                                <i class="fa-solid fa-solar-panel text-3xl text-destaque mb-3"></i>
+                                <h3 class="font-bold text-lg text-white">Projetos Renováveis</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÃO SOLICITADO: FALE COM NOSSO TIME -->
+                    <div class="flex justify-center mt-6">
+                        <a href="https://wa.me/5571996617289?text=Ol%C3%A1!%20Gostaria%20de%20falar%20com%20o%20time%20da%20GeoAgreste." target="_blank" class="bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold px-6 py-2.5 rounded-full shadow-xl transition-all duration-300 flex items-center gap-2 text-base hover:scale-105 border border-white/20">
+                            <i class="fa-brands fa-whatsapp text-xl"></i> Fale com nosso time
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABA 2: QUEM SOMOS ================= -->
+        <section id="sobre" class="tab-content pt-10 pb-20 section-bg bg-sobre text-white min-h-[85vh]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 secao-empresa-wrapper">
+                <div class="section-title">
+                    <h2>
+                        <span>A</span>
+                        <span class="destaque-txt">GEO</span><span>AGRESTE</span>
+                    </h2>
+                    <p>Precisão que gera valor, segurança que garante o futuro.</p>
+                </div>
+                
+                <!-- LAYOUT HARMONIZADO: Texto da Empresa vs Sócios & Valores -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 items-stretch">
+                    
+                    <!-- LADO ESQUERDO: QUEM SOMOS (TEXTO) -->
+                    <div class="glass-card p-8 md:p-10 rounded-2xl flex flex-col justify-center h-full hover:border-destaque/30 transition-colors duration-300">
+                        <h3 class="text-2xl md:text-3xl font-bold text-destaque mb-6 font-montserrat">Precisão que Gera Valor</h3>
+                        <div class="space-y-5 text-gray-200 text-sm md:text-base text-justify leading-relaxed">
+                            <p>A GeoAgreste é uma empresa de Engenharia especializada em Agrimensura, Cartografia e Geotecnologias, fundada em 30 de outubro de 2025 por profissionais formados pela Universidade Federal da Bahia (UFBA).</p>
+                            <p>Atuamos na aquisição, processamento e análise de dados geoespaciais, transformando informações do território em produtos técnicos confiáveis para subsidiar projetos, estudos e processos de tomada de decisão. Desenvolvemos soluções digitais, aplicativos Android e plataformas web para cadastro multifinalitário urbano, gestão de informações territoriais e cálculo de IPTU.</p>
+                            <p>Nossa experiência contempla mais de <strong class="text-white">3.000 hectares em aerolevantamentos com drones</strong> e <strong class="text-white">1.200 hectares em levantamentos topográficos convencionais</strong>, aplicando tecnologias, metodologias e procedimentos compatíveis com as exigências técnicas de cada projeto.</p>
+                            <p>Integramos <strong class="text-white">engenharia, precisão e tecnologia</strong> para entregar informações espaciais consistentes, rastreáveis e tecnicamente fundamentadas.</p>
+                        </div>
+                    </div>
+
+                    <!-- LADO DIREITO: SÓCIOS E VALORES -->
+                    <div class="flex flex-col gap-6 h-full">
+                        
+                        <!-- Sócios -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Sócio 1 -->
+                            <div class="glass-card p-6 rounded-2xl flex flex-col items-center text-center border-t-4 border-destaque hover:-translate-y-1 transition-transform duration-300">
+                                <img src="victor.jpeg" alt="Victor Gomes" class="w-24 h-24 rounded-full object-cover border-2 border-destaque mb-4 shadow-xl p-1 bg-white/10" onerror="this.src='https://via.placeholder.com/100'">
+                                <h4 class="font-bold text-lg text-white font-montserrat mb-1">Victor Gomes</h4>
+                                <span class="text-destaque text-[10px] font-bold uppercase tracking-wider mb-3">Sócio-Diretor Técnico</span>
+                                <p class="text-[13px] text-gray-300 leading-relaxed">Engenheiro Agrimensor e Cartógrafo (UFBA). Especialista em Aerolevantamento, REURB, Georreferenciamento e Dev de Softwares GIS.</p>
+                            </div>
+                            
+                            <!-- Sócio 2 -->
+                            <div class="glass-card p-6 rounded-2xl flex flex-col items-center text-center border-t-4 border-destaque hover:-translate-y-1 transition-transform duration-300">
+                                <img src="filipe.jpeg" alt="Filipe Soares" class="w-24 h-24 rounded-full object-cover border-2 border-destaque mb-4 shadow-xl p-1 bg-white/10" onerror="this.src='https://via.placeholder.com/100'">
+                                <h4 class="font-bold text-lg text-white font-montserrat mb-1">Filipe Soares</h4>
+                                <span class="text-destaque text-[10px] font-bold uppercase tracking-wider mb-3">Sócio-Diretor de Inovação</span>
+                                <p class="text-[13px] text-gray-300 leading-relaxed">Engenheiro Agrimensor e Cartógrafo (UFBA). Especialista em Geoprocessamento, Energias Renováveis (Eólica/Solar) e RPA.</p>
+                            </div>
+                        </div>
+
+                        <!-- Quadro de Valores (Missão, Visão, Valores) -->
+                        <div class="glass-card p-6 md:p-8 rounded-2xl flex-1 flex flex-col justify-center hover:border-destaque/30 transition-colors duration-300">
+                            <h3 class="text-lg font-bold text-white font-montserrat mb-6 text-center border-b border-white/10 pb-4 uppercase tracking-widest">Nosso Propósito</h3>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                                
+                                <!-- Missão -->
+                                <div class="text-center pt-4 sm:pt-0 sm:px-4 flex flex-col items-center">
+                                    <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-destaque mb-4 border border-white/10 shadow-inner">
+                                        <i class="fa-solid fa-rocket text-xl"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white mb-2 uppercase text-[13px] tracking-wider">Missão</h4>
+                                    <p class="text-xs text-gray-300 leading-relaxed">Transformar dados territoriais em soluções de engenharia confiáveis, apoiando projetos, estudos e decisões estratégicas.</p>
+                                </div>
+                                
+                                <!-- Visão -->
+                                <div class="text-center pt-6 sm:pt-0 sm:px-4 flex flex-col items-center">
+                                    <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-destaque mb-4 border border-white/10 shadow-inner">
+                                        <i class="fa-solid fa-eye text-xl"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white mb-2 uppercase text-[13px] tracking-wider">Visão</h4>
+                                    <p class="text-xs text-gray-300 leading-relaxed">Ser referência em Engenharia e Geotecnologias na Bahia, reconhecida pela excelência técnica, inovação e confiabilidade de suas soluções.</p>
+                                </div>
+
+                                <!-- Valores -->
+                                <div class="text-center pt-6 sm:pt-0 sm:px-4 flex flex-col items-center">
+                                    <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-destaque mb-4 border border-white/10 shadow-inner">
+                                        <i class="fa-solid fa-gem text-xl"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white mb-2 uppercase text-[13px] tracking-wider">Valores</h4>
+                                    <ul class="text-[11px] text-gray-300 leading-relaxed text-left inline-block space-y-1.5 mt-1">
+                                        <li><i class="fa-solid fa-check text-destaque/80 mr-1.5"></i> Excelência técnica</li>
+                                        <li><i class="fa-solid fa-check text-destaque/80 mr-1.5"></i> Precisão e confiabilidade</li>
+                                        <li><i class="fa-solid fa-check text-destaque/80 mr-1.5"></i> Ética e transparência</li>
+                                        <li><i class="fa-solid fa-check text-destaque/80 mr-1.5"></i> Inovação e eficiência</li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= ABA 3: SERVIÇOS ================= -->
+        <section id="servicos" class="tab-content py-20 section-bg bg-servicos text-white min-h-[85vh]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Nossas Especialidades</h2>
+                    <div class="w-24 h-1 bg-destaque mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Card 1 -->
+                    <div class="glass-card rounded-2xl p-8 hover:shadow-xl hover:border-destaque/50 transition duration-300 group">
+                        <div class="w-14 h-14 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center text-destaque mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-plane-up text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">AEROLEVANTAMENTO</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Topografia com Drones</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Modelagem 3D do Terreno</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Geração de Ortomosaicos</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Inspeções Estruturais</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-card rounded-2xl p-8 hover:shadow-xl hover:border-destaque/50 transition duration-300 group">
+                        <div class="w-14 h-14 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center text-destaque mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-layer-group text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">GESTÃO FUNDIÁRIA</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Desmembramento de Áreas</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Remembramento</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Retificação de Área</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Usucapião Extrajudicial</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="glass-card rounded-2xl p-8 hover:shadow-xl hover:border-destaque/50 transition duration-300 group">
+                        <div class="w-14 h-14 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center text-destaque mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-city text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">REGULARIZAÇÃO FUNDIÁRIA URBANA</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Projetos de REURB-S</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Projetos de REURB-E</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Levantamento Planialtimétrico</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Projetos Urbanísticos</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass-card rounded-2xl p-8 hover:shadow-xl hover:border-destaque/50 transition duration-300 group">
+                        <div class="w-14 h-14 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center text-destaque mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-tractor text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">REGULARIZAÇÃO FUNDIÁRIA RURAL</h3>
+                        <ul class="space-y-2 text-gray-300 text-sm">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Inscrição no CAR</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Certificação SIGEF</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Emissão e Atualização CCIR</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-destaque mt-1 mr-2"></i> Declaração de ITR</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABA 4: CURSOS ================= -->
+        <section id="cursos" class="tab-content py-20 section-bg bg-cursos text-white min-h-[85vh]">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Capacitação Profissional</h2>
+                        <div class="w-24 h-1 bg-destaque rounded-full"></div>
+                        <p class="mt-4 text-gray-300">Inscrições abertas para todas as nossas turmas.</p>
+                    </div>
+                    <button onclick="openCourseModal()" class="admin-only btn-primary px-5 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Novo Curso
+                    </button>
+                </div>
+
+                <!-- Lista Dinâmica de Cursos -->
+                <div class="glass-card rounded-2xl overflow-hidden mb-12">
+                    <div id="courseList" class="divide-y divide-white/10">
+                        <!-- Renderizado dinamicamente pelo JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Banner Corporativo Treinamento -->
+                <div class="glass-card border-destaque/30 rounded-2xl p-8 shadow-lg text-white flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 opacity-10">
+                        <i class="fa-solid fa-users text-9xl"></i>
+                    </div>
+                    <div class="relative z-10 md:pr-8">
+                        <h3 class="text-2xl font-bold mb-3 flex items-center gap-3">
+                            <i class="fa-solid fa-user-tie text-destaque"></i> Cursos Individuais e Corporativos
+                        </h3>
+                        <p class="text-gray-200">Treinamentos sob medida e In Company para empresas e prefeituras. Adaptamos a carga horária e o conteúdo programático à realidade e necessidade da sua equipe.</p>
+                    </div>
+                    <div class="relative z-10 w-full md:w-auto mt-6 md:mt-0 flex-shrink-0">
+                        <a href="https://wa.me/5571996617289?text=Olá,%20gostaria%20de%20um%20orçamento%20para%20treinamento%20corporativo." target="_blank" class="block text-center btn-primary px-8 py-4 rounded-full font-bold whitespace-nowrap shadow-lg">
+                            Solicitar Orçamento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABA 5: SOLUÇÕES DIGITAIS ================= -->
+        <section id="solucoes" class="tab-content py-20 section-bg bg-solucoes text-white min-h-[85vh]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Nossas Soluções Digitais</h2>
+                    <div class="w-24 h-1 bg-destaque mx-auto rounded-full"></div>
+                    <p class="mt-4 text-gray-300 max-w-2xl mx-auto">Softwares robustos desenvolvidos com tecnologia de ponta para otimizar a gestão territorial de prefeituras e empresas.</p>
+                </div>
+
+                <!-- CM REURB -->
+                <div class="flex flex-col lg:flex-row items-center gap-12 mb-24 glass-card p-8 rounded-2xl">
+                    <div class="lg:w-1/2">
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                            <img src="solucoes_digitais\REURB.png" alt="Dashboard CM REURB" class="w-full h-auto">
+                            <div class="absolute inset-0 bg-black/20"></div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="inline-block bg-destaque/20 border border-destaque text-white font-bold px-4 py-1 rounded-full text-sm mb-4">Plataforma Web & Mobile</div>
+                        <h3 class="text-3xl font-bold text-white mb-2">CM REURB</h3>
+                        <h4 class="text-xl text-destaque mb-6 font-medium">Aplicativo de Cadastro Multifinalitário e Gestão de IPTU</h4>
+                        <p class="text-gray-300 mb-6 leading-relaxed">Desenvolvido especificamente para atender às demandas de gestão pública e corporativa, o CM REURB centraliza e moderniza o cadastro de imóveis, proporcionando uma arrecadação justa e processos organizados.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-gray-300 text-sm">
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-destaque mt-1"></i><span>Gestão completa e inteligente de IPTU</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-destaque mt-1"></i><span>Cadastro imobiliário georreferenciado</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-destaque mt-1"></i><span>Coleta de dados em campo via App</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-destaque mt-1"></i><span>Geração de relatórios gerenciais</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-destaque mt-1"></i><span>Integração com base cartográfica</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-destaque mt-1"></i><span>Agilidade em Projetos de REURB</span></div>
+                        </div>
+                        <a href="https://wa.me/5571996617289?text=Olá,%20gostaria%20de%20agendar%20uma%20demonstração%20do%20CM%20REURB." target="_blank" class="inline-flex items-center gap-2 btn-primary px-6 py-3 rounded-lg font-semibold">
+                            Agendar Demonstração <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- SIG WEB (SRF) -->
+                <div class="flex flex-col lg:flex-row-reverse items-center gap-12 glass-card p-8 rounded-2xl">
+                    <div class="lg:w-1/2">
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                            <img src="solucoes_digitais\SRF.png" alt="SIG Web Mapas" class="w-full h-auto">
+                            <div class="absolute inset-0 bg-black/20"></div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="inline-block bg-blue-500/20 border border-blue-400 text-white font-bold px-4 py-1 rounded-full text-sm mb-4">Sistema de Informação Geográfica</div>
+                        <h3 class="text-3xl font-bold text-white mb-2">SIG WEB (SRF)</h3>
+                        <h4 class="text-xl text-destaque mb-6 font-medium">Plataforma Avançada de Mapeamento e Topografia</h4>
+                        <p class="text-gray-300 mb-6 leading-relaxed"> Um ambiente web completo para manipulação de dados espaciais. Esqueça softwares pesados de desktop; gerencie mapas, lotes e memoriais diretamente no seu navegador com performance de ponta.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-gray-300 text-sm">
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-layer-group text-destaque mt-1"></i><span>Gerenciamento avançado de camadas</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-map text-destaque mt-1"></i><span>Visualização de ortofotos em alta resolução</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-file-pdf text-destaque mt-1"></i><span>Geração de Memorial Descritivo em lote</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-print text-destaque mt-1"></i><span>Geração e impressão de Plantas em lote</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-draw-polygon text-destaque mt-1"></i><span>Criação e edição de pontos, linhas e polígonos</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-database text-destaque mt-1"></i><span>Banco de dados geoespacial seguro</span></div>
+                        </div>
+                        <a href="https://wa.me/5571996617289?text=Olá,%20tenho%20interesse%20em%20implantar%20o%20SIG%20WEB%20na%20minha%20empresa." target="_blank" class="inline-flex items-center gap-2 border border-white text-white hover:bg-white hover:text-primaria transition px-6 py-3 rounded-lg font-semibold">
+                            Falar com Consultor <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABA 6: PORTFÓLIO ================= -->
+        <section id="portfolio" class="tab-content py-20 section-bg bg-portfolio text-white min-h-[85vh]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-end mb-12">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Nosso Portfólio</h2>
+                        <div class="w-24 h-1 bg-destaque rounded-full"></div>
+                    </div>
+                    <button onclick="openPortfolioModal()" class="admin-only btn-primary px-5 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Adicionar Projeto
+                    </button>
+                </div>
+
+                <div id="portfolioGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Renderizado via JS -->
+                </div>
+            </div>
+        </section>
+    
+        <!-- ================= ABA ADMIN: DASHBOARD ================= -->
+        <section id="dashboard" class="tab-content py-10 bg-slate-100 min-h-[85vh]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-destaque">Área Administrativa</p>
+                        <h2 class="text-3xl font-bold text-slate-800 mt-1">Dashboard de Acessos</h2>
+                        <p class="text-sm text-slate-500 mt-1">Acompanhamento dos visitantes e do comportamento no site.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="dashboardUpdated" class="text-xs text-slate-500">Atualizando...</span>
+                        <button onclick="loadDashboard()" class="px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm text-sm font-semibold"><i class="fa-solid fa-rotate mr-2"></i>Atualizar</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between"><span class="text-sm font-medium text-slate-500">Online agora</span><span class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-signal"></i></span></div>
+                        <div id="kpiOnline" class="text-3xl font-bold text-slate-800 mt-4">—</div><p class="text-xs text-slate-400 mt-1">Ativos nos últimos 90 segundos</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between"><span class="text-sm font-medium text-slate-500">Visitantes hoje</span><span class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-user"></i></span></div>
+                        <div id="kpiToday" class="text-3xl font-bold text-slate-800 mt-4">—</div><p class="text-xs text-slate-400 mt-1">Visitantes únicos com acesso hoje</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between"><span class="text-sm font-medium text-slate-500">Visitantes — 7 dias</span><span class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-calendar-week"></i></span></div>
+                        <div id="kpiWeek" class="text-3xl font-bold text-slate-800 mt-4">—</div><p class="text-xs text-slate-400 mt-1">Visitantes únicos</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between"><span class="text-sm font-medium text-slate-500">Visitantes — 30 dias</span><span class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-chart-column"></i></span></div>
+                        <div id="kpiMonth" class="text-3xl font-bold text-slate-800 mt-4">—</div><p class="text-xs text-slate-400 mt-1">Visitantes únicos</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between mb-5"><div><h3 class="font-bold text-slate-800">Visitantes por dia</h3><p class="text-xs text-slate-400">Últimos 30 dias</p></div><span id="viewsMonth" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600">— visualizações</span></div>
+                        <div id="trendChart" class="h-56 flex items-end gap-1 sm:gap-2 border-b border-slate-100"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">Dispositivos</h3><p class="text-xs text-slate-400 mb-5">Visitantes nos últimos 30 dias</p>
+                        <div id="devicesList" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">Páginas mais acessadas</h3><p class="text-xs text-slate-400 mb-5">Visualizações nos últimos 30 dias</p>
+                        <div id="pagesList" class="space-y-3"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">Origem dos visitantes</h3><p class="text-xs text-slate-400 mb-5">Como chegaram ao site</p>
+                        <div id="sourcesList" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> O sistema utiliza sessões anônimas para estatísticas. Não exibe nome, e-mail ou identidade dos visitantes.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ CORPORATIVO -->
+    <footer class="bg-primaria text-white border-t border-secundaria pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                
+                <!-- Coluna 1: Sobre a Empresa -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="Sem_Fundo.png" alt="GeoAgreste Logo" class="h-10 w-auto object-contain bg-white/10 rounded p-1">
+                        <span class="font-bold text-xl tracking-tight">GeoAgreste</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                        GeoAgreste Soluções Cartográficas. Referência em engenharia de agrimensura, cartografia, sistemas corporativos e regularização fundiária.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="https://wa.me/5571996617289" target="_blank" class="w-9 h-9 rounded-full bg-white/15 hover:bg-destaque flex items-center justify-center transition text-white" title="WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <a href="https://www.instagram.com/geo_agreste/" target="_blank" class="w-9 h-9 rounded-full bg-white/15 hover:bg-destaque flex items-center justify-center transition text-white" title="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="mailto:contato@geoagreste.com.br" class="w-9 h-9 rounded-full bg-white/15 hover:bg-destaque flex items-center justify-center transition text-white" title="E-mail">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Navegação -->
+                <div>
+                    <h4 class="text-base font-bold mb-4 border-l-4 border-destaque pl-3 uppercase tracking-wider">Navegação</h4>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><button onclick="switchTab('home')" class="hover:text-destaque transition">Início</button></li>
+                        <li><button onclick="switchTab('sobre')" class="hover:text-destaque transition">Quem Somos</button></li>
+                        <li><button onclick="switchTab('servicos')" class="hover:text-destaque transition">Serviços</button></li>
+                        <li><button onclick="switchTab('cursos')" class="hover:text-destaque transition">Cursos</button></li>
+                        <li><button onclick="switchTab('solucoes')" class="hover:text-destaque transition">Soluções Digitais</button></li>
+                        <li><button onclick="switchTab('portfolio')" class="hover:text-destaque transition">Portfólio</button></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Soluções e Sistemas -->
+                <div>
+                    <h4 class="text-base font-bold mb-4 border-l-4 border-destaque pl-3 uppercase tracking-wider">Sistemas & Soluções</h4>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><span class="hover:text-destaque transition cursor-pointer" onclick="switchTab('solucoes')">Plataforma CM REURB (IPTU & Cadastro)</span></li>
+                        <li><span class="hover:text-destaque transition cursor-pointer" onclick="switchTab('solucoes')">Plataforma SIG WEB (SRF)</span></li>
+                        <li><span class="hover:text-destaque transition cursor-pointer" onclick="switchTab('servicos')">Aerolevantamento com Drones</span></li>
+                        <li><span class="hover:text-destaque transition cursor-pointer" onclick="switchTab('servicos')">Regularização Urbana e Rural</span></li>
+                        <li><span class="hover:text-destaque transition cursor-pointer" onclick="switchTab('servicos')">Georreferenciamento</span></li>
+                        <li><span class="hover:text-destaque transition cursor-pointer" onclick="switchTab('cursos')">Capacitação & Treinamentos</span></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 4: Endereço Oficial e Contato -->
+                <div>
+                    <h4 class="text-base font-bold mb-4 border-l-4 border-destaque pl-3 uppercase tracking-wider">Contato & Endereço</h4>
+                    <div class="space-y-3 text-sm text-gray-300">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot text-destaque mt-1 flex-shrink-0"></i>
+                            <span>Rua São Miguel das Matas, 26 - Itinga<br>Lauro de Freitas - BA, CEP 42739-740</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-destaque flex-shrink-0"></i>
+                            <span>(71) 99661-7289</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-destaque flex-shrink-0"></i>
+                            <span>contato@geoagreste.com.br</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Linha inferior Copyright -->
+            <div class="border-t border-secundaria pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 gap-4">
+                <button id="btnLogin" onclick="openModal('modalLogin')" class="text-gray-500/70 hover:text-destaque transition text-xs opacity-60 hover:opacity-100" title="Acesso restrito" aria-label="Acesso restrito">
+                    <i class="fa-solid fa-lock"></i>
+                </button>
+                <p>&copy; 2026 GeoAgreste Soluções Cartográficas LTDA. Todos os direitos reservados.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition">Política de Privacidade</a>
+                    <a href="#" class="hover:text-white transition">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botão Flutuante do WhatsApp -->
+    <a href="https://wa.me/5571996617289" class="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-xl hover:bg-[#20bd5a] hover:scale-110 transition duration-300 z-50 border border-white/20" target="_blank" title="Fale pelo WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Modais de Admin -->
+    <div id="modalLogin" class="fixed inset-0 z-[100] hidden modal-backdrop flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300">
+            <div class="bg-primaria p-6 text-center">
+                <h3 class="text-xl font-bold text-white">Acesso Restrito</h3>
+            </div>
+            <div class="p-6">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+                        <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                        <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeModal('modalLogin')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition font-medium">Cancelar</button>
+                        <button type="submit" class="flex-1 btn-primary py-2 rounded-lg transition font-medium">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Informações do Curso -->
+    <div id="modalCourseInfo" class="fixed inset-0 z-[100] hidden modal-backdrop flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+            <div class="border-b border-gray-100 p-6 flex justify-between items-start bg-gray-50">
+                <h3 id="infoTitle" class="text-2xl font-bold text-primaria pr-8">Título</h3>
+                <button onclick="closeModal('modalCourseInfo')" class="text-gray-400 hover:text-gray-600 absolute right-6 top-6"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-grow">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                        <span class="block text-xs font-bold text-blue-800 uppercase tracking-wider mb-1">Carga Horária</span>
+                        <div class="flex items-center text-blue-900 font-semibold"><i class="fa-regular fa-clock mr-2"></i> <span id="infoHours">--</span></div>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-3 border border-green-100">
+                        <span class="block text-xs font-bold text-green-800 uppercase tracking-wider mb-1">Ministrante</span>
+                        <div class="flex items-center text-green-900 font-semibold"><i class="fa-solid fa-chalkboard-user mr-2"></i> <span id="infoInstructor">--</span></div>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-2 border-b pb-2">Resumo do Curso</h4>
+                    <p id="infoDesc" class="text-gray-600 leading-relaxed"></p>
+                </div>
+                <div class="mb-6">
+                    <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-2 border-b pb-2">Conteúdo Programático</h4>
+                    <div id="infoContent" class="text-gray-600 leading-relaxed whitespace-pre-line text-sm bg-gray-50 p-4 rounded-lg border border-gray-100"></div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-200 gap-4">
+                    <div>
+                        <span class="block text-xs text-gray-500 uppercase font-bold mb-1">Investimento</span>
+                        <span id="infoPrice" class="text-2xl font-bold text-primaria">R$ --</span>
+                    </div>
+                    <div id="infoActionBtn"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar/Editar Curso -->
+    <div id="modalCourseForm" class="fixed inset-0 z-[100] hidden modal-backdrop flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+            <div class="bg-primaria p-5 flex-shrink-0">
+                <h3 id="courseModalTitle" class="text-lg font-bold text-white">Adicionar Curso</h3>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <form id="courseForm" onsubmit="saveCourse(event)">
+                    <input type="hidden" id="courseId">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Título do Curso</label>
+                            <input type="text" id="courseTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Carga Horária</label>
+                            <input type="text" id="courseHours" placeholder="Ex: 40 horas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ministrante</label>
+                            <input type="text" id="courseInstructor" placeholder="Nome do Professor" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Valor / Investimento</label>
+                            <input type="text" id="coursePrice" placeholder="Ex: R$ 850,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Link de Inscrição (Opcional)</label>
+                            <input type="url" id="courseLink" placeholder="URL para inscrição (opcional)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Resumo Curto (Card)</label>
+                        <textarea id="courseDesc" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required></textarea>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo Programático Completo</label>
+                        <textarea id="courseContent" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" placeholder="- Módulo 1: Introdução...&#10;- Módulo 2: Prática..." required></textarea>
+                    </div>
+                    <div class="flex gap-3 pt-4 border-t border-gray-100">
+                        <button type="button" onclick="closeModal('modalCourseForm')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg transition font-medium">Cancelar</button>
+                        <button type="submit" class="flex-1 btn-primary py-3 rounded-lg transition font-medium">Salvar Curso</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form Portfólio (Admin) -->
+    <div id="modalPortfolioForm" class="fixed inset-0 z-[100] hidden modal-backdrop flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-300">
+            <div class="bg-primaria p-5">
+                <h3 id="portfolioModalTitle" class="text-lg font-bold text-white">Adicionar Projeto</h3>
+            </div>
+            <div class="p-6">
+                <form id="portfolioForm" onsubmit="savePortfolio(event)">
+                    <input type="hidden" id="portfolioId">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Título do Projeto</label>
+                        <input type="text" id="portfolioTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">URL da Imagem</label>
+                        <input type="url" id="portfolioImg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-destaque focus:outline-none" placeholder="https://..." required>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeModal('modalPortfolioForm')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition font-medium">Cancelar</button>
+                        <button type="submit" class="flex-1 btn-primary py-2 rounded-lg transition font-medium">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT CONTROLADOR SPA E INTERATIVIDADE -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroTrack = document.getElementById('hero-slider-track');
+            if(heroTrack) {
+                heroTrack.innerHTML += heroTrack.innerHTML;
+            }
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            const activeTab = document.getElementById(tabId);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active', 'text-white');
+                link.classList.add('text-gray-200');
+            });
+            
+            const activeNav = document.getElementById('nav-' + tabId);
+            if(activeNav) {
+                activeNav.classList.remove('text-gray-200');
+                activeNav.classList.add('active', 'text-white');
+            }
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => link.classList.remove('active'));
+            const activeMobileNav = document.getElementById('mobile-nav-' + tabId);
+            if(activeMobileNav) activeMobileNav.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            trackPage(tabId);
+            if (tabId === 'dashboard' && isAdmin) loadDashboard();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileNav');
+            const button = document.getElementById('mobileMenuButton');
+            if (!menu || !button) return;
+
+            const willOpen = !menu.classList.contains('open');
+            menu.classList.toggle('open', willOpen);
+            button.setAttribute('aria-expanded', String(willOpen));
+            button.setAttribute('aria-label', willOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+            button.innerHTML = willOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileNav');
+            const button = document.getElementById('mobileMenuButton');
+            if (!menu || !button) return;
+
+            menu.classList.remove('open');
+            button.setAttribute('aria-expanded', 'false');
+            button.setAttribute('aria-label', 'Abrir menu de navegação');
+            button.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+
+        const defaultCourses = [
+            { 
+                id: 1, 
+                title: "Piloto Profissional de Drone", 
+                info: "Capacitação completa para operação comercial de drones, regulamentação ANAC/DECEA e segurança de voo.",
+                hours: "40 horas",
+                instructor: "Equipe Especializada GeoAgreste",
+                content: "• Legislação vigente (ANAC, DECEA, Ministério da Defesa)\n• Componentes e sistemas de RPA\n• Planejamento de Voo e Meteorologia\n• Prática de voo com simuladores e em campo\n• Coleta de dados básicos",
+                price: "R$ 1.250,00",
+                link: "https://geoagresteacademy.netlify.app/"
+            },
+            { 
+                id: 2, 
+                title: "CCIR na Prática", 
+                info: "Aprenda a emitir e atualizar o Certificado de Cadastro de Imóvel Rural, essencial para transações e financiamentos.",
+                hours: "16 horas",
+                instructor: "Eng. Agrimensor Victor Gomes",
+                content: "• Introdução ao SNCR (Sistema Nacional de Cadastro Rural)\n• Documentação necessária e análise dominial\n• Preenchimento prático no sistema do INCRA\n• Tratamento de inconsistências e sobreposições\n• Atualização e desmembramento no CCIR",
+                price: "R$ 680,00",
+                link: ""
+            },
+            { 
+                id: 3, 
+                title: "Dominando o CAR & QGIS", 
+                info: "Treinamento intensivo sobre o Cadastro Ambiental Rural, legislação vigente e manuseio do software QGIS.",
+                hours: "24 horas",
+                instructor: "Eng. Cartógrafo Filipe Soares",
+                content: "• Legislação (Novo Código Florestal)\n• Mapeamento de APP, Reserva Legal e Área Consolidada\n• Uso do QGIS para vetorização de dados\n• Inserção de dados no SICAR\n• Análise e Retificação de Cadastros",
+                price: "R$ 850,00",
+                link: ""
+            }
+        ];
+
+        const defaultPortfolio = [
+            { id: 1, title: "Georreferenciamento Fazenda Boa Esperança", img: "https://images.unsplash.com/photo-1623869680373-c6b22b64d04c?auto=format&fit=crop&q=80&w=800" },
+            { id: 2, title: "Projeto REURB Residencial Vista Verde", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800" },
+            { id: 3, title: "Aerolevantamento e Inspeção 3D Solar Tech", img: "https://images.unsplash.com/photo-1508344928928-7137b29339d0?auto=format&fit=crop&q=80&w=800" }
+        ];
+
+        let isAdmin = false;
+        let courses = JSON.parse(localStorage.getItem('geoagreste_courses_v5')) || defaultCourses;
+        let portfolio = JSON.parse(localStorage.getItem('geoagreste_portfolio_v5')) || defaultPortfolio;
+        const WPP_NUMBER = "5571996617289";
+
+        if (!portfolio) { portfolio = defaultPortfolio; savePortfolioData(); }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateAdminUI();
+            await loadCourses();
+            renderCourses();
+            renderPortfolio();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkServerAuth();
+            startVisitorHeartbeat();
+        });
+
+        async function loadCourses() {
+            try {
+                const response = await fetch(`${ANALYTICS_API}/api/courses?_=${Date.now()}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    cache: 'no-store'
+                });
+                const data = await response.json();
+                if (!response.ok || !data.ok || !Array.isArray(data.courses)) {
+                    throw new Error(data.error || 'Não foi possível carregar os cursos.');
+                }
+                courses = data.courses;
+                localStorage.setItem('geoagreste_courses_v5', JSON.stringify(courses));
+            } catch (error) {
+                console.warn('Cursos online indisponíveis. Usando cache local.', error);
+                if (!Array.isArray(courses) || !courses.length) courses = defaultCourses;
+            }
+        }
+
+        function saveCoursesData() { localStorage.setItem('geoagreste_courses_v5', JSON.stringify(courses)); }
+        function savePortfolioData() { localStorage.setItem('geoagreste_portfolio_v5', JSON.stringify(portfolio)); }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div').classList.remove('scale-95');
+                }, 10);
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.add('opacity-0');
+                modal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    if(id === 'modalCourseForm') document.getElementById('courseForm').reset();
+                    if(id === 'modalPortfolioForm') document.getElementById('portfolioForm').reset();
+                    if(id === 'modalLogin') document.getElementById('loginForm').reset();
+                }, 300);
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            const button = e.submitter;
+            if (button) button.disabled = true;
+            try {
+                const response = await fetch('https://oficial-u677.onrender.com/api/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({username: user, password: pass})
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Falha no login.');
+                isAdmin = true;
+                updateAdminUI();
+                closeModal('modalLogin');
+                switchTab('dashboard');
+                await loadDashboard();
+            } catch (error) {
+                alert(error.message || 'Não foi possível realizar o login.');
+            } finally {
+                if (button) button.disabled = false;
+            }
+        }
+
+        async function logout() {
+            try { await fetch('https://oficial-u677.onrender.com/api/logout', {method: 'POST', credentials: 'include'}); } catch (_) {}
+            isAdmin = false;
+            updateAdminUI();
+            switchTab('home');
+        }
+
+        function updateAdminUI() {
+            document.body.classList.toggle('admin-mode', isAdmin);
+            const login = document.getElementById('btnLogin');
+            const logoutBtn = document.getElementById('btnLogout');
+            if (login) login.classList.toggle('hidden', isAdmin);
+            if (logoutBtn) logoutBtn.classList.toggle('hidden', !isAdmin);
+            document.querySelectorAll('#dashboard, #nav-dashboard').forEach(el => {
+                if (isAdmin) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+        }
+
+        async function checkServerAuth() {
+            try {
+                const response = await fetch('https://oficial-u677.onrender.com/api/auth/me', {credentials: 'include'});
+                const data = await response.json();
+                isAdmin = !!data.authenticated;
+            } catch (_) {
+                isAdmin = false;
+            }
+            updateAdminUI();
+            if (isAdmin) {
+                await loadDashboard();
+            } else {
+                trackPage('home');
+            }
+        }
+
+        // ============================================================
+        // ANALYTICS / VISITANTES
+        // Não depende de cookie de terceiros: o UUID fica no
+        // localStorage do navegador e é enviado ao backend.
+        // Isso é importante para acessos via 4G e celulares.
+        // ============================================================
+        const ANALYTICS_API = 'https://oficial-u677.onrender.com';
+        const VISITOR_STORAGE_KEY = 'geoagreste_visitor_id_v1';
+
+        function getVisitorId() {
+            try {
+                let id = localStorage.getItem(VISITOR_STORAGE_KEY);
+                if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+                    id = (crypto.randomUUID ? crypto.randomUUID() : generateFallbackUuid());
+                    localStorage.setItem(VISITOR_STORAGE_KEY, id);
+                }
+                return id;
+            } catch (_) {
+                return '';
+            }
+        }
+
+        function generateFallbackUuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        async function trackPage(page) {
+            if (isAdmin || page === 'dashboard') return;
+
+            const visitor_id = getVisitorId();
+
+            try {
+                const response = await fetch(ANALYTICS_API + '/api/track', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    keepalive: true,
+                    body: JSON.stringify({
+                        page: String(page || 'home').slice(0, 80),
+                        visitor_id
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json().catch(() => null);
+                    if (data && data.visitor_id && data.visitor_id !== visitor_id) {
+                        try { localStorage.setItem(VISITOR_STORAGE_KEY, data.visitor_id); } catch (_) {}
+                    }
+                }
+            } catch (error) {
+                console.debug('Analytics indisponível:', error);
+            }
+        }
+
+        function sendVisitorHeartbeat() {
+            if (isAdmin) return;
+
+            const visitor_id = getVisitorId();
+
+            fetch(ANALYTICS_API + '/api/heartbeat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                keepalive: true,
+                body: JSON.stringify({visitor_id})
+            }).catch(() => {});
+        }
+
+        function startVisitorHeartbeat() {
+            sendVisitorHeartbeat();
+            setInterval(sendVisitorHeartbeat, 20000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') sendVisitorHeartbeat();
+            });
+
+            window.addEventListener('pagehide', sendVisitorHeartbeat);
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+        }
+
+        function renderList(elementId, items, total, iconClass) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (!items.length) {
+                el.innerHTML = '<p class="text-sm text-slate-400">Ainda não há dados suficientes.</p>';
+                return;
+            }
+            el.innerHTML = items.slice(0, 6).map(item => {
+                const pct = total ? Math.max(2, Math.round(item.value / total * 100)) : 0;
+                return `<div>
+                    <div class="flex justify-between items-center mb-1.5 text-sm"><span class="text-slate-600 font-medium"><i class="${iconClass} mr-2 text-slate-400"></i>${escapeHtml(item.name)}</span><span class="font-bold text-slate-700">${item.value}</span></div>
+                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-destaque rounded-full" style="width:${pct}%"></div></div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderTrend(trend) {
+            const el = document.getElementById('trendChart');
+            if (!el) return;
+            const max = Math.max(1, ...trend.map(x => x.visitors));
+            el.innerHTML = trend.map(x => {
+                const h = Math.max(3, Math.round((x.visitors / max) * 100));
+                const label = new Date(x.date + 'T12:00:00').toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+                return `<div class="flex-1 h-full flex flex-col justify-end items-center gap-1 group" title="${label}: ${x.visitors} visitante(s)"><div class="w-full max-w-5 bg-destaque/80 rounded-t-md dashboard-bar transition hover:bg-destaque" style="height:${h}%"></div><span class="text-[9px] text-slate-400 hidden sm:block">${label.slice(0,5)}</span></div>`;
+            }).join('');
+        }
+
+        async function loadDashboard() {
+            if (!isAdmin) return;
+            try {
+                const response = await fetch('https://oficial-u677.onrender.com/api/admin/stats', {credentials: 'include'});
+                if (response.status === 401) { isAdmin = false; updateAdminUI(); return; }
+                const data = await response.json();
+                const k = data.kpis;
+                document.getElementById('kpiOnline').textContent = k.online;
+                document.getElementById('kpiToday').textContent = k.visitors_today;
+                document.getElementById('kpiWeek').textContent = k.visitors_week;
+                document.getElementById('kpiMonth').textContent = k.visitors_month;
+                document.getElementById('viewsMonth').textContent = `${k.views_month} visualizações`;
+                renderTrend(data.trend);
+                renderList('devicesList', data.devices, data.devices.reduce((a,b)=>a+b.value,0), 'fa-solid fa-mobile-screen-button');
+                renderList('pagesList', data.pages.map(x=>({name:x.page, value:x.views})), k.views_month, 'fa-solid fa-file-lines');
+                renderList('sourcesList', data.sources, data.sources.reduce((a,b)=>a+b.value,0), 'fa-solid fa-arrow-right-to-bracket');
+                document.getElementById('dashboardUpdated').textContent = 'Atualizado às ' + new Date(data.updated_at).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+            } catch (error) {
+                console.error('Dashboard:', error);
+                document.getElementById('dashboardUpdated').textContent = 'Erro ao atualizar';
+            }
+        }
+
+        function renderCourses() {
+            const container = document.getElementById('courseList');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            courses.forEach(course => {
+                const row = document.createElement('div');
+                row.className = 'course-row flex flex-col md:flex-row justify-between items-start md:items-center p-6 hover:bg-white/5 transition gap-4';
+                
+                let btnInscricao = '';
+                if(course.link && course.link.trim() !== '') {
+                    btnInscricao = `<a href="${course.link}" target="_blank" class="text-sm font-bold bg-destaque hover:bg-[#659a22] text-white px-5 py-2.5 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square"></i> Inscrever-se</a>`;
+                } else {
+                    const wppText = encodeURIComponent(`Olá, gostaria de me inscrever no curso: ${course.title}.`);
+                    btnInscricao = `<a href="https://wa.me/${WPP_NUMBER}?text=${wppText}" target="_blank" class="text-sm font-bold bg-destaque hover:bg-[#659a22] text-white px-5 py-2.5 rounded-lg transition shadow-sm flex items-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> Inscrever-se</a>`;
+                }
+
+                row.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-1">
+                            <h4 class="text-xl font-bold text-white">${course.title}</h4>
+                            <span class="bg-destaque/20 border border-destaque text-white text-xs px-2 py-1 rounded font-bold uppercase tracking-wider">${course.hours}</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mt-1">${course.info}</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+                        <button onclick="showCourseInfo(${course.id})" class="text-sm font-semibold text-white border border-white/30 hover:bg-white/10 px-5 py-2.5 rounded-lg transition">Ver Detalhes</button>
+                        ${btnInscricao}
+                        <div class="admin-only flex gap-2 ml-auto md:ml-2">
+                            <button onclick="editCourse(${course.id})" class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/40 flex items-center justify-center transition shadow-sm"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteCourse(${course.id})" class="w-10 h-10 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/40 flex items-center justify-center transition shadow-sm"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+            updateAdminUI();
+        }
+
+        function showCourseInfo(id) {
+            const course = courses.find(c => c.id === id);
+            if(course) {
+                document.getElementById('infoTitle').textContent = course.title;
+                document.getElementById('infoDesc').textContent = course.info;
+                document.getElementById('infoHours').textContent = course.hours;
+                document.getElementById('infoInstructor').textContent = course.instructor;
+                document.getElementById('infoContent').textContent = course.content;
+                document.getElementById('infoPrice').textContent = course.price;
+                
+                let btnHtml = '';
+                if(course.link && course.link.trim() !== '') {
+                    btnHtml = `<a href="${course.link}" target="_blank" class="btn-primary px-8 py-3 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:shadow-xl"><i class="fa-solid fa-arrow-up-right-from-square"></i> Inscrever-se</a>`;
+                } else {
+                    const wppText = encodeURIComponent(`Olá, gostaria de realizar minha inscrição no curso: ${course.title}.`);
+                    btnHtml = `<a href="https://wa.me/${WPP_NUMBER}?text=${wppText}" target="_blank" class="btn-primary px-8 py-3 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:shadow-xl"><i class="fa-brands fa-whatsapp text-xl"></i> Garantir Minha Vaga</a>`;
+                }
+                document.getElementById('infoActionBtn').innerHTML = btnHtml;
+
+                openModal('modalCourseInfo');
+            }
+        }
+
+        function openCourseModal(id = null) {
+            if (id) {
+                const course = courses.find(c => c.id === id);
+                document.getElementById('courseId').value = course.id;
+                document.getElementById('courseTitle').value = course.title;
+                document.getElementById('courseDesc').value = course.info;
+                document.getElementById('courseHours').value = course.hours;
+                document.getElementById('courseInstructor').value = course.instructor;
+                document.getElementById('courseContent').value = course.content;
+                document.getElementById('coursePrice').value = course.price;
+                document.getElementById('courseLink').value = course.link || '';
+                document.getElementById('courseModalTitle').textContent = 'Editar Curso';
+            } else {
+                document.getElementById('courseId').value = '';
+                document.getElementById('courseForm').reset();
+                document.getElementById('courseModalTitle').textContent = 'Adicionar Curso';
+            }
+            openModal('modalCourseForm');
+        }
+
+        function editCourse(id) { openCourseModal(id); }
+
+        async function saveCourse(e) {
+            e.preventDefault();
+
+            if (!isAdmin) {
+                alert('Faça login como administrador para salvar o curso.');
+                return;
+            }
+
+            const id = document.getElementById('courseId').value;
+            const newCourseData = {
+                title: document.getElementById('courseTitle').value.trim(),
+                info: document.getElementById('courseDesc').value.trim(),
+                hours: document.getElementById('courseHours').value.trim(),
+                instructor: document.getElementById('courseInstructor').value.trim(),
+                content: document.getElementById('courseContent').value.trim(),
+                price: document.getElementById('coursePrice').value.trim(),
+                link: document.getElementById('courseLink').value.trim()
+            };
+
+            if (!newCourseData.title) {
+                alert('Informe o nome do curso.');
+                return;
+            }
+
+            const button = e.submitter;
+            if (button) button.disabled = true;
+
+            try {
+                const url = id
+                    ? `${ANALYTICS_API}/api/courses/${encodeURIComponent(id)}`
+                    : `${ANALYTICS_API}/api/courses`;
+
+                const response = await fetch(url, {
+                    method: id ? 'PUT' : 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify(newCourseData)
+                });
+
+                const data = await response.json();
+                if (!response.ok || !data.ok) {
+                    throw new Error(data.error || 'Não foi possível salvar o curso no servidor.');
+                }
+
+                await loadCourses();
+                renderCourses();
+                closeModal('modalCourseForm');
+                alert(id ? 'Curso atualizado com sucesso.' : 'Curso publicado com sucesso.');
+            } catch (error) {
+                console.error(error);
+                alert(error.message || 'Não foi possível salvar o curso.');
+            } finally {
+                if (button) button.disabled = false;
+            }
+        }
+
+        async function deleteCourse(id) {
+            if (!isAdmin) {
+                alert('Faça login como administrador.');
+                return;
+            }
+
+            if (!confirm('Tem certeza que deseja excluir este curso?')) return;
+
+            try {
+                const response = await fetch(`${ANALYTICS_API}/api/courses/${encodeURIComponent(id)}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                if (!response.ok || !data.ok) {
+                    throw new Error(data.error || 'Não foi possível excluir o curso.');
+                }
+
+                await loadCourses();
+                renderCourses();
+            } catch (error) {
+                console.error(error);
+                alert(error.message || 'Não foi possível excluir o curso.');
+            }
+        }
+
+        function renderPortfolio() {
+            const container = document.getElementById('portfolioGrid');
+            if(!container) return;
+            container.innerHTML = '';
+
+            portfolio.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'group relative rounded-2xl overflow-hidden aspect-[4/3] shadow-md hover:shadow-xl transition-all duration-300 border border-white/10';
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/800x600/1b3d22/ffffff?text=Projeto+GeoAgreste'">
+                    <div class="absolute inset-0 portfolio-overlay flex flex-col justify-end p-6">
+                        <h4 class="text-white font-bold text-lg leading-tight">${item.title}</h4>
+                    </div>
+                    <div class="admin-only absolute top-3 right-3 gap-2 flex">
+                        <button onclick="editPortfolio(${item.id})" class="w-9 h-9 rounded-lg bg-white/90 text-blue-600 hover:bg-white flex items-center justify-center shadow-lg transition"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deletePortfolio(${item.id})" class="w-9 h-9 rounded-lg bg-white/90 text-red-600 hover:bg-white flex items-center justify-center shadow-lg transition"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            updateAdminUI();
+        }
+
+        function openPortfolioModal(id = null) {
+            if (id) {
+                const item = portfolio.find(p => p.id === id);
+                document.getElementById('portfolioId').value = item.id;
+                document.getElementById('portfolioTitle').value = item.title;
+                document.getElementById('portfolioImg').value = item.img;
+                document.getElementById('portfolioModalTitle').textContent = 'Editar Projeto';
+            } else {
+                document.getElementById('portfolioId').value = '';
+                document.getElementById('portfolioForm').reset();
+                document.getElementById('portfolioModalTitle').textContent = 'Adicionar Projeto';
+            }
+            openModal('modalPortfolioForm');
+        }
+
+        function editPortfolio(id) { openPortfolioModal(id); }
+
+        function savePortfolio(e) {
+            e.preventDefault();
+            const id = document.getElementById('portfolioId').value;
+            const title = document.getElementById('portfolioTitle').value;
+            const img = document.getElementById('portfolioImg').value;
+
+            if (id) {
+                const index = portfolio.findIndex(p => p.id == id);
+                portfolio[index] = { id: parseInt(id), title, img };
+            } else {
+                const newId = portfolio.length > 0 ? Math.max(...portfolio.map(p => p.id)) + 1 : 1;
+                portfolio.push({ id: newId, title, img });
+            }
+
+            savePortfolioData();
+            renderPortfolio();
+            closeModal('modalPortfolioForm');
+        }
+
+        function deletePortfolio(id) {
+            if (confirm('Tem certeza que deseja excluir este projeto?')) {
+                portfolio = portfolio.filter(p => p.id !== id);
+                savePortfolioData();
+                renderPortfolio();
+            }
+        }
+    </script>
+</body>
+</html>
