@@ -1,0 +1,21 @@
+name: Manter Render Ativo
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  keep-render-alive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Acordar e manter o backend do Render ativo
+        run: |
+          echo "Chamando o backend..."
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            "https://oficial-u677.onrender.com/healthz"
+
+          echo ""
+          echo "Backend respondeu com sucesso."
